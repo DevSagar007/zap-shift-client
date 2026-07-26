@@ -4,6 +4,8 @@ import Login from "@/pages/Auth/Login/Login";
 import Register from "@/pages/Auth/Register/Register";
 import Home from "@/pages/Home/Home";
 import { createBrowserRouter } from "react-router";
+import PrivateRoute from "./PrivateRoute";
+import RiderRegister from "../pages/Rider/RiderRegister";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +17,10 @@ export const router = createBrowserRouter([
         Component: Home,
       },
     ],
+  },
+  {
+    path: 'rider',
+    element: <PrivateRoute><RiderRegister></RiderRegister></PrivateRoute>
   },
   {
     path: "/",

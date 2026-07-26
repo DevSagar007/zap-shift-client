@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import authImage from "../../../../public/assets/authImage.png";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import Logo from "@/components/Logo";
 import useAuth from "../../../hooks/useAuth";
@@ -12,6 +12,9 @@ import SocialLogin from "../SocialLogin/SocialLogin";
 export default function LoginPage() {
   // call useAuth
   const { signInUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log('in the login page', location);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,6 +35,7 @@ export default function LoginPage() {
     signInUser(formData.email, formData.password)
       .then((result) => {
         console.log(result.user);
+        navigate(location?.state || '/')
       })
       .catch((error) => {
         console.log(error);
@@ -115,12 +119,12 @@ export default function LoginPage() {
               {/* Register */}
               <p className="mt-4 text-sm text-muted-foreground">
                 Don&apos;t have an account?{" "}
-                <a
+                <Link state={location?.state}
                   href="/register"
                   className="font-medium text-lime-700 transition-colors hover:text-lime-800"
                 >
                   Register
-                </a>
+                </Link>
               </p>
 
               {/* Divider */}

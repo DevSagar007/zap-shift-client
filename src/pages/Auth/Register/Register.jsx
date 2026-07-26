@@ -5,13 +5,15 @@ import { Separator } from "@/components/ui/separator";
 import authImage from "../../../../public/assets/authImage.png";
 import { useState } from "react";
 import Logo from "@/components/Logo";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 
 function Register() {
   // call useAuth
   const { registerUser } = useAuth();
+  const location = useLocation();
+  console.log('in register',location);
 
   const [formData, setFormData] = useState({
     name: "",
