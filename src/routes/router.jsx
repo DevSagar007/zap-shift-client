@@ -6,6 +6,7 @@ import Home from "@/pages/Home/Home";
 import { createBrowserRouter } from "react-router";
 import PrivateRoute from "./PrivateRoute";
 import RiderRegister from "../pages/Rider/RiderRegister";
+import SendParcel from "../pages/SendParcel/SendParcel";
 
 export const router = createBrowserRouter([
   {
@@ -19,8 +20,21 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: 'rider',
-    element: <PrivateRoute><RiderRegister></RiderRegister></PrivateRoute>
+    path: "rider",
+    element: (
+      <PrivateRoute>
+        <RiderRegister></RiderRegister>
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "send-parcel",
+    element: (
+      <PrivateRoute>
+        <SendParcel></SendParcel>
+      </PrivateRoute>
+    ),
+    loader: () => fetch("/serviceCentets.json").then((res) => res.json()),
   },
   {
     path: "/",
