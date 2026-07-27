@@ -36,6 +36,7 @@ function SendParcel() {
       receiverName: "",
       receiverAddress: "",
       receiverContact: "",
+      receiverRegion: "",
       receiverDistrict: "",
       deliveryInstruction: "",
     },
@@ -52,31 +53,49 @@ function SendParcel() {
     () => [...new Set(activeServiceCenters.map((center) => center.region))],
     [activeServiceCenters],
   );
-  const allDistricts = useMemo(
-    () => [...new Set(activeServiceCenters.map((center) => center.district))],
-    [activeServiceCenters],
-  );
+  
+  // watch
   const senderRegion = useWatch({ control, name: "senderRegion" });
+  const receiverRegion = useWatch({ control, name: "receiverRegion" });
+
   const senderDistricts = useMemo(
-    () =>
-      [...new Set(
+    () => [
+      ...new Set(
         activeServiceCenters
           .filter((center) => center.region === senderRegion)
           .map((center) => center.district),
-      )],
+      ),
+    ],
     [activeServiceCenters, senderRegion],
+  );
+
+  const receiverDistricts = useMemo(
+    () => [
+      ...new Set(
+        activeServiceCenters
+          .filter((center) => center.region === receiverRegion)
+          .map((center) => center.district),
+      ),
+    ],
+    [activeServiceCenters, receiverRegion],
   );
 
   useEffect(() => {
     resetField("senderDistrict");
   }, [resetField, senderRegion]);
 
+  useEffect(() => {
+    resetField("receiverDistrict");
+  }, [resetField, receiverRegion]);
+
   const onSubmit = (data) => {
     console.log("parcel booking data:", data);
   };
 
   const fieldError = (field) =>
-    errors[field] && <p className="text-sm text-red-600">{errors[field].message}</p>;
+    errors[field] && (
+      <p className="text-sm text-red-600">{errors[field].message}</p>
+    );
 
   return (
     <main className="min-h-screen bg-white px-6 py-12 text-[#03373d] sm:px-10 lg:px-20">
@@ -122,7 +141,9 @@ function SendParcel() {
               <Input
                 id="parcelName"
                 name="parcelName"
-                {...register("parcelName", { required: "Parcel name is required." })}
+                {...register("parcelName", {
+                  required: "Parcel name is required.",
+                })}
                 placeholder="Parcel Name"
                 required
                 className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
@@ -140,7 +161,10 @@ function SendParcel() {
                 step="0.1"
                 {...register("parcelWeight", {
                   required: "Parcel weight is required.",
-                  min: { value: 0.1, message: "Weight must be greater than 0." },
+                  min: {
+                    value: 0.1,
+                    message: "Weight must be greater than 0.",
+                  },
                 })}
                 placeholder="Parcel Weight (KG)"
                 required
@@ -161,7 +185,9 @@ function SendParcel() {
                   <Label htmlFor="senderName">Sender Name</Label>
                   <Input
                     id="senderName"
-                    {...register("senderName", { required: "Sender name is required." })}
+                    {...register("senderName", {
+                      required: "Sender name is required.",
+                    })}
                     placeholder="Sender Name"
                     required
                     className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
@@ -173,7 +199,9 @@ function SendParcel() {
                   <Label htmlFor="senderAddress">Address</Label>
                   <Input
                     id="senderAddress"
-                    {...register("senderAddress", { required: "Sender address is required." })}
+                    {...register("senderAddress", {
+                      required: "Sender address is required.",
+                    })}
                     placeholder="Address"
                     required
                     className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
@@ -189,7 +217,7 @@ function SendParcel() {
                     {...register("senderPhone", {
                       required: "Sender phone number is required.",
                       pattern: {
-                        value: /^(?:\\+8801|01)\\d{9}$/,
+                        value: /^01[3-9]\d{8}$/,
                         message: "Enter a valid Bangladeshi phone number.",
                       },
                     })}
@@ -207,12 +235,22 @@ function SendParcel() {
                     control={control}
                     rules={{ required: "Select the sender's region." }}
                     render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger id="senderRegion" className="h-10 border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          id="senderRegion"
+                          className="h-10 w-full border-slate-300 focus:border-lime-400 focus:ring-lime-200/70"
+                        >
                           <SelectValue placeholder="Select sender region" />
                         </SelectTrigger>
                         <SelectContent>
-                          {regions.map((region) => <SelectItem key={region} value={region}>{region}</SelectItem>)}
+                          {regions.map((region) => (
+                            <SelectItem key={region} value={region}>
+                              {region}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -227,12 +265,29 @@ function SendParcel() {
                     control={control}
                     rules={{ required: "Select the sender's district." }}
                     render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange} disabled={!senderRegion}>
-                        <SelectTrigger id="senderDistrict" className="h-10 border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
-                          <SelectValue placeholder={senderRegion ? "Select sender district" : "Choose a region first"} />
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={!senderRegion}
+                      >
+                        <SelectTrigger
+                          id="senderDistrict"
+                          className="h-10 w-full border-slate-300 focus:border-lime-400 focus:ring-lime-200/70"
+                        >
+                          <SelectValue
+                            placeholder={
+                              senderRegion
+                                ? "Select sender district"
+                                : "Choose a region first"
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          {senderDistricts.map((district) => <SelectItem key={district} value={district}>{district}</SelectItem>)}
+                          {senderDistricts.map((district) => (
+                            <SelectItem key={district} value={district}>
+                              {district}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -260,7 +315,9 @@ function SendParcel() {
                   <Label htmlFor="receiverName">Receiver Name</Label>
                   <Input
                     id="receiverName"
-                    {...register("receiverName", { required: "Receiver name is required." })}
+                    {...register("receiverName", {
+                      required: "Receiver name is required.",
+                    })}
                     placeholder="Receiver Name"
                     required
                     className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
@@ -272,7 +329,9 @@ function SendParcel() {
                   <Label htmlFor="receiverAddress">Receiver Address</Label>
                   <Input
                     id="receiverAddress"
-                    {...register("receiverAddress", { required: "Receiver address is required." })}
+                    {...register("receiverAddress", {
+                      required: "Receiver address is required.",
+                    })}
                     placeholder="Address"
                     required
                     className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
@@ -288,7 +347,7 @@ function SendParcel() {
                     {...register("receiverContact", {
                       required: "Receiver phone number is required.",
                       pattern: {
-                        value: /^(?:\\+8801|01)\\d{9}$/,
+                        value: /^01[3-9]\d{8}$/,
                         message: "Enter a valid Bangladeshi phone number.",
                       },
                     })}
@@ -300,18 +359,65 @@ function SendParcel() {
                 </div>
 
                 <div className="grid gap-1.5">
+                  <Label htmlFor="receiverRegion">Receiver Region</Label>
+                  <Controller
+                    name="receiverRegion"
+                    control={control}
+                    rules={{ required: "Select the receiver's region." }}
+                    render={({ field }) => (
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger
+                          id="receiverRegion"
+                          className="h-10 w-full border-slate-300 focus:border-lime-400 focus:ring-lime-200/70"
+                        >
+                          <SelectValue placeholder="Select receiver region" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {regions.map((region) => (
+                            <SelectItem key={region} value={region}>
+                              {region}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {fieldError("receiverRegion")}
+                </div>
+
+                <div className="grid gap-1.5">
                   <Label htmlFor="receiverDistrict">Receiver District</Label>
                   <Controller
                     name="receiverDistrict"
                     control={control}
                     rules={{ required: "Select the receiver's district." }}
                     render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <SelectTrigger id="receiverDistrict" className="h-10 border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
-                          <SelectValue placeholder="Select receiver district" />
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={!receiverRegion}
+                      >
+                        <SelectTrigger
+                          id="receiverDistrict"
+                          className="h-10 w-full border-slate-300 focus:border-lime-400 focus:ring-lime-200/70"
+                        >
+                          <SelectValue
+                            placeholder={
+                              receiverRegion
+                                ? "Select receiver district"
+                                : "Choose receiver region first"
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          {allDistricts.map((district) => <SelectItem key={district} value={district}>{district}</SelectItem>)}
+                          {receiverDistricts.map((district) => (
+                            <SelectItem key={district} value={district}>
+                              {district}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
