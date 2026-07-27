@@ -6,17 +6,20 @@ const SocialLogin = () => {
   const { signInGoogle } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  console.log('location in the social login', location);
+
+  const from = location.state?.from;
+  const redirectPath = from
+    ? `${from.pathname}${from.search || ""}${from.hash || ""}`
+    : "/";
 
   const handleGoogleSignIn = () => {
     signInGoogle()
-    .then(result => {
-      console.log(result.user)
-      navigate(location.state || '/')
-    })
-    .catch (error => {
-      console.log(error);
-    })
+      .then(() => {
+        navigate(redirectPath, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (

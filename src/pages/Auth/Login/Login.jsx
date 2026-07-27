@@ -14,7 +14,11 @@ export default function LoginPage() {
   const { signInUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  console.log('in the login page', location);
+
+  const from = location.state?.from;
+  const redirectPath = from
+    ? `${from.pathname}${from.search || ""}${from.hash || ""}`
+    : "/";
 
   const [formData, setFormData] = useState({
     email: "",
@@ -33,9 +37,8 @@ export default function LoginPage() {
 
     console.log("Login Data:", formData);
     signInUser(formData.email, formData.password)
-      .then((result) => {
-        console.log(result.user);
-        navigate(location?.state || '/')
+      .then(() => {
+        navigate(redirectPath, { replace: true });
       })
       .catch((error) => {
         console.log(error);
@@ -119,8 +122,9 @@ export default function LoginPage() {
               {/* Register */}
               <p className="mt-4 text-sm text-muted-foreground">
                 Don&apos;t have an account?{" "}
-                <Link state={location?.state}
-                  href="/register"
+                <Link
+                  state={location?.state}
+                  to="/register"
                   className="font-medium text-lime-700 transition-colors hover:text-lime-800"
                 >
                   Register
