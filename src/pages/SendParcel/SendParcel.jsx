@@ -13,6 +13,9 @@ import {
 } from "@/components/ui/select";
 import { useLoaderData } from "react-router";
 import { Controller, useForm, useWatch } from "react-hook-form";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 function SendParcel() {
   const serviceCenters = useLoaderData();
@@ -21,6 +24,7 @@ function SendParcel() {
     handleSubmit,
     register,
     resetField,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -28,12 +32,14 @@ function SendParcel() {
       parcelName: "",
       parcelWeight: "",
       senderName: "",
+      senderEmail: "",
       senderAddress: "",
       senderPhone: "",
       senderRegion: "",
       senderDistrict: "",
       pickupInstruction: "",
       receiverName: "",
+      receiverEmail: "",
       receiverAddress: "",
       receiverContact: "",
       receiverRegion: "",
@@ -41,6 +47,10 @@ function SendParcel() {
       deliveryInstruction: "",
     },
   });
+  const { user } = useAuth();
+  console.log(user);
+
+  const axiosSecure = useAxiosSecure();
 
   const activeServiceCenters = useMemo(
     () =>
@@ -49,15 +59,17 @@ function SendParcel() {
       ),
     [serviceCenters],
   );
+
   const regions = useMemo(
     () => [...new Set(activeServiceCenters.map((center) => center.region))],
     [activeServiceCenters],
   );
-  
-  // watch
+
+  // Watch
   const senderRegion = useWatch({ control, name: "senderRegion" });
   const receiverRegion = useWatch({ control, name: "receiverRegion" });
 
+  //Sender Districts
   const senderDistricts = useMemo(
     () => [
       ...new Set(
@@ -69,6 +81,7 @@ function SendParcel() {
     [activeServiceCenters, senderRegion],
   );
 
+  // Receiver Districts
   const receiverDistricts = useMemo(
     () => [
       ...new Set(
@@ -88,8 +101,62 @@ function SendParcel() {
     resetField("receiverDistrict");
   }, [resetField, receiverRegion]);
 
-  const onSubmit = (data) => {
+  useEffect(() => {
+    if (user) {
+      setValue("senderName", user.displayName || "");
+      setValue("senderEmail", user.email || "");
+    }
+  }, [setValue, user]);
+
+  const handleSendParcel = (data) => {
     console.log("parcel booking data:", data);
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    console.log("isDocument", isDocument);
+    console.log("isSameDistrict", isSameDistrict);
+
+    // calculation
+    const parcelWeight = parseFloat(data.parcelWeight);
+
+    let parcelCost = 0;
+
+    if (isDocument) {
+      parcelCost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight <= 3) {
+        parcelCost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        // less weight
+        const extraWeight = parcelWeight - 3;
+
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+        parcelCost = minCharge + extraCharge;
+      }
+    }
+    console.log("parcelCost", parcelCost);
+    Swal.fire({
+      title: "Confirm Booking?",
+      text: `Please review your parcel details before confirming the booking ${parcelCost} Taka`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#22c55e",
+      cancelButtonColor: "#ef4444",
+      confirmButtonText: "Confirm Booking",
+    }).then((result) => {
+      if (result.isConfirmed)
+        // save data parcel
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after save parcel", res);
+        });
+      // Swal.fire({
+      //   title: "Deleted!",
+      //   text: "Your file has been deleted.",
+      //   icon: "success",
+      // });
+    });
   };
 
   const fieldError = (field) =>
@@ -104,7 +171,11 @@ function SendParcel() {
           Send A Parcel
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-12" noValidate>
+        <form
+          onSubmit={handleSubmit(handleSendParcel)}
+          className="mt-12"
+          noValidate
+        >
           <h2 className="text-2xl font-extrabold tracking-normal">
             Enter your parcel details
           </h2>
@@ -190,9 +261,26 @@ function SendParcel() {
                     })}
                     placeholder="Sender Name"
                     required
+                    readOnly
                     className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
                   />
                   {fieldError("senderName")}
+                </div>
+
+                <div className="grid gap-1.5">
+                  <Label htmlFor="senderEmail">Sender Email</Label>
+                  <Input
+                    type="email"
+                    id="senderEmail"
+                    {...register("senderEmail", {
+                      required: "Sender email is required.",
+                    })}
+                    placeholder="Sender Email"
+                    required
+                    readOnly
+                    className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
+                  />
+                  {fieldError("senderEmail")}
                 </div>
 
                 <div className="grid gap-1.5">
@@ -323,6 +411,21 @@ function SendParcel() {
                     className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
                   />
                   {fieldError("receiverName")}
+                </div>
+
+                <div className="grid gap-1.5">
+                  <Label htmlFor="receiverEmail">Receiver Email</Label>
+                  <Input
+                    type="email"
+                    id="receiverEmail"
+                    {...register("receiverEmail", {
+                      required: "Sender name is required.",
+                    })}
+                    placeholder="Sender Name"
+                    required
+                    className="h-10 border-slate-300 focus-visible:border-lime-400 focus-visible:ring-lime-200/70"
+                  />
+                  {fieldError("receiverEmail")}
                 </div>
 
                 <div className="grid gap-1.5">
