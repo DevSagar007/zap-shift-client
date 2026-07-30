@@ -1,9 +1,9 @@
 import logoImage from "../assets/logo.svg";
 
-function Logo() {
+function Logo({ className = "", imageClassName = "" }) {
   return (
-    <div>
-      <img src={logoImage} alt="Logo" />
+    <div className={className}>
+      <img className={imageClassName} src={logoImage} alt="Logo" />
     </div>
   );
 }

@@ -2,18 +2,15 @@
 
 import {
   Bike,
-  Boxes,
   LayoutDashboard,
   PackagePlus,
   Send,
-  Truck,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
 import { NavMain } from "./nav-main";
 import { NavProjects } from "./nav-projects";
 import { NavUser } from "./nav-user";
-import { TeamSwitcher } from "./team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -28,18 +25,6 @@ const data = {
     email: "dashboard@zapshift.com",
     avatar: "/assets/customer-top.png",
   },
-  teams: [
-    {
-      name: "Zap Shift",
-      logo: Truck,
-      plan: "Courier",
-    },
-    {
-      name: "Merchant",
-      logo: Boxes,
-      plan: "Business",
-    },
-  ],
   navMain: [
     {
       title: "Overview",
@@ -69,11 +54,11 @@ const data = {
 export function AppSidebar(props) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
-        <div className="flex h-10 items-center px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-          <Logo />
-        </div>
-        <TeamSwitcher teams={data.teams} />
+      <SidebarHeader className="h-16 justify-center border-b px-4 py-0 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2">
+        <Logo
+          className="flex h-9 min-w-0 items-center overflow-hidden"
+          imageClassName="h-full w-auto"
+        />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
