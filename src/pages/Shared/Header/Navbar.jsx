@@ -2,8 +2,11 @@ import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
+import useAuth from "../../../hooks/useAuth";
 
 function Navbar() {
+  const {user} = useAuth();
+
   const navLinks = [
     { label: "Services", href: "/services" },
     { label: "Coverage", href: "/coverage" },
@@ -34,6 +37,16 @@ function Navbar() {
         >
           <Link to="/rider">Be a Rider</Link>
         </Button>
+        {user && (
+          <>
+            <Button
+              asChild
+              className="h-10 rounded-full bg-lime-300 px-6 font-semibold text-[#03373d] hover:bg-lime-400"
+            >
+              <Link to="/dashboard/my-parcels">My parcels</Link>
+            </Button>
+          </>
+        )}
       </div>
 
       <div className="flex items-center gap-3">
