@@ -5,6 +5,9 @@ import {
   LayoutDashboard,
   PackagePlus,
   Send,
+  MapPin,
+  History,
+  Wallet,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
@@ -25,6 +28,7 @@ const data = {
     email: "dashboard@zapshift.com",
     avatar: "/assets/customer-top.png",
   },
+
   navMain: [
     {
       title: "Overview",
@@ -36,7 +40,28 @@ const data = {
       url: "/dashboard/my-parcels",
       icon: Send,
     },
+    {
+      title: "Create Parcel",
+      url: "/dashboard/create-parcel",
+      icon: PackagePlus,
+    },
+    {
+      title: "Parcel Tracking",
+      url: "/dashboard/tracking",
+      icon: MapPin,
+    },
+    {
+      title: "Parcel History",
+      url: "/dashboard/history",
+      icon: History,
+    },
+    {
+      title: "Wallet",
+      url: "/dashboard/wallet",
+      icon: Wallet,
+    },
   ],
+
   projects: [
     {
       name: "Send Parcel",
@@ -60,13 +85,16 @@ export function AppSidebar(props) {
           imageClassName="h-full w-auto"
         />
       </SidebarHeader>
+
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
+
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );

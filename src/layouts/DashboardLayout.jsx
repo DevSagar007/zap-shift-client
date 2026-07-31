@@ -1,4 +1,3 @@
-import { AppSidebar } from "@/components/ui/dashboard/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
@@ -6,6 +5,7 @@ import {
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Outlet } from "react-router";
+import { AppSidebar } from "../components/ui/app-sidebar";
 
 export default function DashboardLayout() {
   return (
