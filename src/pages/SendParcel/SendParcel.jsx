@@ -137,6 +137,7 @@ function SendParcel() {
       }
     }
     console.log("parcelCost", parcelCost);
+    data.parcelCost = parcelCost;
     Swal.fire({
       title: "Confirm Booking?",
       text: `Please review your parcel details before confirming the booking ${parcelCost} Taka`,
