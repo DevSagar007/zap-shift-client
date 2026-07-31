@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 
 function MyParcels() {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ function MyParcels() {
     isPending,
     error,
     data: parcels = [],
+    refetch,
   } = useQuery({
     queryKey: ["myParcels", user?.email],
     enabled: !!user?.email,
@@ -32,6 +34,34 @@ function MyParcels() {
 
   if (error) return "An error has occurred: " + error.message;
   console.log("parcels", parcels);
+
+  // handleDelete
+  const handleDelete = (id) => {
+    console.log("click id", id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed)
+        axiosSecure.delete(`/parcels/${id}`).then((res) => {
+          console.log(res.data);
+          if (res.data.deletedCount) {
+            // refech the ui
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your parcel has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+    });
+  };
 
   return (
     <div>
@@ -92,12 +122,22 @@ function MyParcels() {
 
                 {/* Action */}
                 <TableCell>
-                  <Button
-                    size="sm"
-                    className="bg-sky-100 text-black hover:bg-sky-200"
-                  >
-                    View
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      className="bg-sky-100 text-black hover:bg-sky-200"
+                    >
+                      View
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(parcel._id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
