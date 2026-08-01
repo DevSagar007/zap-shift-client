@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 function MyParcels() {
   const { user } = useAuth();
@@ -117,7 +118,18 @@ function MyParcels() {
 
                 {/* Payment */}
                 <TableCell>
-                  <span>৳ {parcel.parcelCost} (Paid)</span>
+                  {parcel.paymentStatus === "paid" ? (
+                    <span>৳ {parcel.parcelCost} (Paid)</span>
+                  ) : (
+                    <Link to={`/dashboard/payment/${parcel._id}`}>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                      >
+                        Pay now
+                      </Button>
+                    </Link>
+                  )}
                 </TableCell>
 
                 {/* Action */}
