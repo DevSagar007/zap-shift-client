@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -51,6 +51,7 @@ function SendParcel() {
   console.log(user);
 
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   const activeServiceCenters = useMemo(
     () =>
@@ -150,13 +151,18 @@ function SendParcel() {
       if (result.isConfirmed)
         // save data parcel
         axiosSecure.post("/parcels", data).then((res) => {
-          console.log("after save parcel", res);
+          console.log("after save parcel", res.data);
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "top-center",
+              icon: "success",
+              title: "Please continue to payment work has been save",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+          navigate("/dashboard/my-parcels");
         });
-      // Swal.fire({
-      //   title: "Deleted!",
-      //   text: "Your file has been deleted.",
-      //   icon: "success",
-      // });
     });
   };
 
