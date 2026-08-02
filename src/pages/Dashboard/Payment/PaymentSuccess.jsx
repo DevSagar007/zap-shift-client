@@ -1,8 +1,25 @@
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import { useEffect } from "react";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 function PaymentSuccess() {
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  console.log(sessionId);
+  const axiosSecure = useAxiosSecure();
+
+  useEffect(() => {
+    if (sessionId) {
+      axiosSecure
+        .patch(`/payment-success?session_id=${sessionId}`)
+        .then((res) => {
+          console.log(res.data);
+        });
+    }
+  }, [sessionId, axiosSecure]);
+
   return (
     <div className="flex min-h-[80vh] items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-xl">
