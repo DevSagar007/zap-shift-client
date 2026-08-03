@@ -1,13 +1,13 @@
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useSearchParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
-  console.log(sessionId);
+  const [paymentInfo, setPaymentInfo] = useState({});
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
@@ -16,6 +16,10 @@ function PaymentSuccess() {
         .patch(`/payment-success?session_id=${sessionId}`)
         .then((res) => {
           console.log(res.data);
+          setPaymentInfo({
+            transactionId: res.data.transactionId,
+            trackingId: res.data.trackingId,
+          });
         });
     }
   }, [sessionId, axiosSecure]);
@@ -32,9 +36,15 @@ function PaymentSuccess() {
         <h1 className="mb-2 text-3xl font-bold text-slate-900">
           Payment Successful!
         </h1>
+        <p className="text-slate-600">
+          Your transaction Id : {paymentInfo.transactionId}
+        </p>
+        <p className="text-slate-600">
+          Your parcel tracking Id : {paymentInfo.trackingId}
+        </p>
 
         {/* Description */}
-        <p className="mb-8 text-sm leading-6 text-slate-500">
+        <p className="mb-8 text-sm leading-6 text-slate-500 mt-3">
           Thank you! Your payment has been completed successfully.
           <br />
           Your parcel is now confirmed and being processed.

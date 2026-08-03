@@ -112,7 +112,7 @@ function MyParcels() {
                 {/* Tracking */}
                 <TableCell>
                   <span className="font-medium">
-                    {parcel.trackingNumber || "N/A"}
+                    {parcel.trackingId || "N/A"}
                   </span>
                 </TableCell>
 
@@ -122,10 +122,7 @@ function MyParcels() {
                     <span>৳ {parcel.parcelCost} (Paid)</span>
                   ) : (
                     <Link to={`/dashboard/payment/${parcel._id}`}>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                      >
+                      <Button size="sm" variant="destructive">
                         Pay now
                       </Button>
                     </Link>
