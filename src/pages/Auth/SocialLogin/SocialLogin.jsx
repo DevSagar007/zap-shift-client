@@ -1,25 +1,42 @@
 import { Button } from "@/components/ui/button";
 import useAuth from "../../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SocialLogin = () => {
   const { signInGoogle } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
   const from = location.state?.from;
   const redirectPath = from
     ? `${from.pathname}${from.search || ""}${from.hash || ""}`
     : "/";
 
-  const handleGoogleSignIn = () => {
-    signInGoogle()
-      .then(() => {
-        navigate(redirectPath, { replace: true });
-      })
-      .catch((error) => {
-        console.log(error);
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInGoogle();
+      const token = await result.user.getIdToken();
+
+      const userInfo = {
+        name: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+        role: "user",
+        createdAt: new Date().toISOString(),
+      };
+
+      await axiosSecure.post("/users", userInfo, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      navigate(redirectPath, { replace: true });
+    } catch (error) {
+      console.error("Google sign-in failed:", error);
+    }
   };
 
   return (
