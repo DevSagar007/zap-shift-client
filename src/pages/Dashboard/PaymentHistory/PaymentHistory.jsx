@@ -65,6 +65,7 @@ function PaymentHistory() {
               <TableHead>Parcel Info</TableHead>
               <TableHead>Recipient Info</TableHead>
               <TableHead>Tracking Number</TableHead>
+              <TableHead>Payment Time</TableHead>
               <TableHead>Payment Info</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -102,6 +103,14 @@ function PaymentHistory() {
                 <TableCell>
                   <span className="font-medium">
                     {parcel.trackingId || "N/A"}
+                  </span>
+                </TableCell>
+
+
+                {/* Time */}
+                <TableCell>
+                  <span className="font-medium">
+                    {parcel.paidAt || "N/A"}
                   </span>
                 </TableCell>
 

@@ -5,15 +5,22 @@ import { Separator } from "@/components/ui/separator";
 import authImage from "../../../../public/assets/authImage.png";
 import { useState } from "react";
 import Logo from "@/components/Logo";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 function Register() {
   // call useAuth
   const { registerUser } = useAuth();
   const location = useLocation();
-  console.log('in register',location);
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+
+  const from = location.state?.from;
+  const redirectPath = from
+    ? `${from.pathname}${from.search || ""}${from.hash || ""}`
+    : "/";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -21,6 +28,7 @@ function Register() {
     password: "",
   });
 
+  // handle Change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -28,17 +36,32 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  // handle submit
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("register Data:", formData);
-    registerUser(formData.email, formData.password)
-      .then((result) => {
-        console.log(result.user);
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const result = await registerUser(formData.email, formData.password);
+      const token = await result.user.getIdToken();
+
+      const userInfo = {
+        name: formData.name,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+        role: "user",
+        createdAt: new Date().toISOString(),
+      };
+
+      await axiosSecure.post("/users", userInfo, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      navigate(redirectPath, { replace: true });
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
   return (
     <div>
