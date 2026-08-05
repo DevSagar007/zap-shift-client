@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signOut,
   signInWithPopup,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -34,11 +35,18 @@ function AuthProvider({ children }) {
     return signInWithPopup(auth, googleProvider);
   };
 
+  // sign out user
+  const signOutUser = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
+
   // auth state observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+      console.log(currentUser, "currentUser");
     });
 
     return () => unsubscribe();
@@ -51,6 +59,7 @@ function AuthProvider({ children }) {
     registerUser,
     signInUser,
     signInGoogle,
+    signOutUser,
   };
 
   return (
