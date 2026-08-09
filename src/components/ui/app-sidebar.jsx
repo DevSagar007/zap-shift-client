@@ -9,6 +9,7 @@ import {
   History,
   Wallet,
   Receipt,
+  UserCheck,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
@@ -51,11 +52,11 @@ const data = {
       url: "/dashboard/tracking",
       icon: MapPin,
     },
-      {
-    title: "Payment History",
-    url: "/dashboard/payment-history",
-    icon: Receipt, // or CreditCard
-  },
+    {
+      title: "Payment History",
+      url: "/dashboard/payment-history",
+      icon: Receipt, // or CreditCard
+    },
     {
       title: "Parcel History",
       url: "/dashboard/history",
@@ -65,6 +66,11 @@ const data = {
       title: "Wallet",
       url: "/dashboard/wallet",
       icon: Wallet,
+    },
+    {
+      title: "Approve Riders",
+      url: "/dashboard/approve-riders",
+      icon: UserCheck,
     },
   ],
 
