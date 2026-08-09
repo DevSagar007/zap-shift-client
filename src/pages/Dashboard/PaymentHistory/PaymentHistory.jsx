@@ -56,7 +56,7 @@ function PaymentHistory() {
   return (
     <div>
       <div className="text-4xl font-extrabold mb-5">
-        PaymentHistory {payments.length}
+        Payment History {payments.length}
       </div>
       <div className="rounded-xl border overflow-hidden">
         <Table>
@@ -106,12 +106,9 @@ function PaymentHistory() {
                   </span>
                 </TableCell>
 
-
                 {/* Time */}
                 <TableCell>
-                  <span className="font-medium">
-                    {parcel.paidAt || "N/A"}
-                  </span>
+                  <span className="font-medium">{parcel.paidAt || "N/A"}</span>
                 </TableCell>
 
                 {/* Payment */}

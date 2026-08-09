@@ -11,41 +11,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useAuth from "../../hooks/useAuth";
-import { useLocation, useNavigation } from "react-router";
-
-const regions = [
-  "Dhaka",
-  "Chattogram",
-  "Rajshahi",
-  "Khulna",
-  "Barishal",
-  "Sylhet",
-  "Rangpur",
-  "Mymensingh",
-];
-
-const districts = [
-  "Dhaka",
-  "Gazipur",
-  "Narayanganj",
-  "Chattogram",
-  "Cumilla",
-  "Rajshahi",
-  "Khulna",
-  "Sylhet",
-];
+import { useLoaderData, useLocation, useNavigation } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 function RiderRegister() {
-  const {registerUser} = useAuth()
-  console.log(registerUser);
+  const { user } = useAuth();
   const location = useLocation();
   const navigation = useNavigation();
+  const serviceCenters = useLoaderData();
+  const axiosSecure = useAxiosSecure();
+
   console.log(navigation);
-  console.log('in register', location);
+  console.log("in register", location);
   const [formData, setFormData] = useState({
-    name: "",
+    name: user?.displayName || "",
     drivingLicenseNumber: "",
-    email: "",
+    email: user?.email || "",
     region: "",
     district: "",
     nid: "",
@@ -54,6 +36,23 @@ function RiderRegister() {
     bikeRegistrationNumber: "",
     about: "",
   });
+
+  // check array data then filter
+  const activeServiceCenters = (
+    Array.isArray(serviceCenters) ? serviceCenters : []
+  ).filter((data) => data.status === "active");
+
+  // region
+  const regions = [...new Set(activeServiceCenters.map((data) => data.region))];
+
+  // districts
+  const districts = [
+    ...new Set(
+      activeServiceCenters
+        .filter((data) => data.region === formData.region)
+        .map((data) => data.district),
+    ),
+  ];
 
   const handleChange = (e) => {
     setFormData({
@@ -66,12 +65,22 @@ function RiderRegister() {
     setFormData({
       ...formData,
       [name]: value,
+      ...(name === "region" ? { district: "" } : {}),
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("rider form data:", formData);
+    axiosSecure.post("/riders", formData).then((res) => {
+      if (res.data.insertedId) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your application has been Submitted",
+          icon: "success",
+        });
+      }
+    });
   };
 
   return (
@@ -148,7 +157,7 @@ function RiderRegister() {
                   value={formData.region}
                   onValueChange={(value) => handleSelectChange("region", value)}
                 >
-                  <SelectTrigger className="h-10 border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
+                  <SelectTrigger className="h-10 w-full border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
                     <SelectValue placeholder="Select your Region" />
                   </SelectTrigger>
                   <SelectContent>
@@ -168,9 +177,16 @@ function RiderRegister() {
                   onValueChange={(value) =>
                     handleSelectChange("district", value)
                   }
+                  disabled={!formData.region}
                 >
-                  <SelectTrigger className="h-10 border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
-                    <SelectValue placeholder="Select your District" />
+                  <SelectTrigger className="h-10 w-full border-slate-300 focus:border-lime-400 focus:ring-lime-200/70">
+                    <SelectValue
+                      placeholder={
+                        formData.region
+                          ? "Select your District"
+                          : "Choose a region first"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {districts.map((district) => (
@@ -256,14 +272,14 @@ function RiderRegister() {
                 type="submit"
                 className="h-10 w-full bg-lime-300 font-semibold text-slate-950 hover:bg-lime-400"
               >
-                Submit
+                Apply Rider
               </Button>
             </form>
           </section>
 
           <section className="hidden min-h-[480px] items-center justify-center lg:flex">
             <img
-              src="/assets/rider.png"
+              src="../../.../../../public/assets/agent-pending.png"
               alt="Rider delivering a parcel"
               className="w-full max-w-[480px] object-contain"
             />

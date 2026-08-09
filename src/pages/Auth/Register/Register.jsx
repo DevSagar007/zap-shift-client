@@ -52,11 +52,13 @@ function Register() {
         createdAt: new Date().toISOString(),
       };
 
-      await axiosSecure.post("/users", userInfo, {
+      const response = await axiosSecure.post("/users", userInfo, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      console.log("User created in database:", response.data);
 
       navigate(redirectPath, { replace: true });
     } catch (error) {

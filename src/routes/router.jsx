@@ -32,6 +32,7 @@ export const router = createBrowserRouter([
         <RiderRegister></RiderRegister>
       </PrivateRoute>
     ),
+    loader: () => fetch("/serviceCentets.json").then((res) => res.json()),
   },
   {
     path: "send-parcel",
