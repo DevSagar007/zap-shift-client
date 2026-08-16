@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 
 function ApproveRiders() {
   const axiosSecure = useAxiosSecure();
@@ -16,6 +17,7 @@ function ApproveRiders() {
   const {
     isPending,
     error,
+    refetch,
     data: riders = [],
   } = useQuery({
     queryKey: ["riders", "pending"],
@@ -29,16 +31,36 @@ function ApproveRiders() {
 
   if (error) return "An error has occurred: " + error.message;
 
-  const handleDelete = (id) => {
-    console.log("delete rider", id);
+  const handleDelete = (rider) => {
+    console.log("delete rider", rider);
   };
 
-  const handleApprove = (id) => {
-    console.log("approve rider", id);
+  // handle approved
+  const handleApprove = (rider) => {
+    updateRiderStatus(rider, "approved");
   };
 
-  const handleReject = (id) => {
-    console.log("reject rider", id);
+  // handle rejected
+  const handleReject = (rider) => {
+    console.log("reject rider", rider);
+  };
+
+  const updateRiderStatus = (rider, status) => {
+    console.log("approve status", rider);
+    const updateInfo = { status: "approved", email:rider.email};
+
+    axiosSecure.patch(`/riders/${rider._id}`, updateInfo).then((res) => {
+      console.log("PATCH response:", res.data);
+
+      if (res.data.modifiedCount) {
+        refetch();
+        Swal.fire({
+          title: "Success!",
+          text: `Rider status is to set to ${status}`,
+          icon: "success",
+        });
+      }
+    });
   };
 
   return (
@@ -129,7 +151,7 @@ function ApproveRiders() {
                     <Button
                       size="sm"
                       className="bg-green-100 text-green-700 hover:bg-green-200"
-                      onClick={() => handleApprove(rider._id)}
+                      onClick={() => handleApprove(rider)}
                     >
                       Approve
                     </Button>
@@ -137,7 +159,7 @@ function ApproveRiders() {
                     <Button
                       size="sm"
                       className="bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                      onClick={() => handleReject(rider._id)}
+                      onClick={() => handleReject(rider)}
                     >
                       Reject
                     </Button>
@@ -145,7 +167,7 @@ function ApproveRiders() {
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => handleDelete(rider._id)}
+                      onClick={() => handleDelete(rider)}
                     >
                       Delete
                     </Button>
@@ -161,3 +183,4 @@ function ApproveRiders() {
 }
 
 export default ApproveRiders;
+ 
