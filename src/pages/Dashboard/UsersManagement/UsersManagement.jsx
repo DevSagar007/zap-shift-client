@@ -41,7 +41,7 @@ function UsersManagement() {
   const handleMakeAdmin = (user) => {
     console.log("Make user:", user);
     const roleInfo = { role: "admin" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+    axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
       if (res.data.modifiedCount) {
         refetch();
         Swal.fire({
@@ -52,7 +52,7 @@ function UsersManagement() {
       }
     });
   };
-  const handleMakeRider = (user) => {
+  const handleRemoveAdmin = (user) => {
     console.log("Make rider:", user);
   };
 
@@ -151,7 +151,7 @@ function UsersManagement() {
                         <Button
                           size="sm"
                           className="bg-green-100 text-green-700 hover:bg-green-200"
-                          onClick={() => handleMakeRider(user)}
+                          onClick={() => handleRemoveAdmin(user)}
                         >
                           Make User
                         </Button>
