@@ -9,12 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 
 function UsersManagement() {
   const axiosSecure = useAxiosSecure();
   // fetch data tanstack
 
   const {
+    refetch,
     data: users = [],
     isLoading,
     isError,
@@ -36,6 +38,20 @@ function UsersManagement() {
 
   console.log("Users Management", users);
 
+  const handleMakeAdmin = (user) => {
+    console.log("Make user:", user);
+    const roleInfo = { role: "admin" };
+    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        refetch();
+        Swal.fire({
+          title: "Success!",
+          text: `${user.displayName} User make admin`,
+          icon: "success",
+        });
+      }
+    });
+  };
   const handleMakeRider = (user) => {
     console.log("Make rider:", user);
   };
@@ -121,13 +137,23 @@ function UsersManagement() {
                   {/* Action */}
                   <TableCell>
                     <div className="flex gap-2">
-                      {user.role !== "rider" && (
+                      {(user.role === "rider" || user.role === "user") && (
+                        <Button
+                          size="sm"
+                          className="bg-green-100 text-green-700 hover:bg-green-200"
+                          onClick={() => handleMakeAdmin(user)}
+                        >
+                          Make Rider
+                        </Button>
+                      )}
+
+                      {user.role === "admin" && (
                         <Button
                           size="sm"
                           className="bg-green-100 text-green-700 hover:bg-green-200"
                           onClick={() => handleMakeRider(user)}
                         >
-                          Make Rider
+                          Make User
                         </Button>
                       )}
 
