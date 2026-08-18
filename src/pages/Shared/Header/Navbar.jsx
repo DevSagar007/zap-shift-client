@@ -1,11 +1,12 @@
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
 import useAuth from "../../../hooks/useAuth";
 
 function Navbar() {
-  const {user} = useAuth();
+  const { user, signOutUser } = useAuth();
+  const navigate = useNavigate();
 
   const navLinks = [
     { label: "Services", href: "/services" },
@@ -13,6 +14,12 @@ function Navbar() {
     { label: "About Us", href: "/about" },
     { label: "Pricing", href: "/pricing" },
   ];
+
+  const handleLogout = () => {
+    signOutUser().then(() => {
+      navigate("/login");
+    });
+  };
 
   return (
     <nav className="flex items-center justify-between w-full">
@@ -50,28 +57,50 @@ function Navbar() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Button
-          asChild
-          variant="outline"
-          className="hidden h-11 rounded-lg border-slate-200 px-7 font-semibold text-slate-700 hover:bg-slate-50 sm:inline-flex"
-        >
-          <Link to="/login">Sign In</Link>
-        </Button>
+        {user ? (
+          <>
+            <Button
+              asChild
+              className="h-11 rounded-lg bg-lime-300 px-7 font-semibold text-slate-950 hover:bg-lime-400"
+            >
+              <Link to="/dashboard">Dashboard</Link>
+            </Button>
 
-        <Button
-          asChild
-          className="h-11 rounded-lg bg-lime-300 px-7 font-semibold text-slate-950 hover:bg-lime-400"
-        >
-          <Link to="/register">Sign Up</Link>
-        </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleLogout}
+              className="h-11 rounded-lg border-slate-200 px-7 font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              Logout
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              asChild
+              variant="outline"
+              className="hidden h-11 rounded-lg border-slate-200 px-7 font-semibold text-slate-700 hover:bg-slate-50 sm:inline-flex"
+            >
+              <Link to="/login">Sign In</Link>
+            </Button>
 
-        <Button
-          size="icon"
-          className="h-12 w-12 rounded-full bg-[#1f1f1f] text-lime-300 hover:bg-[#111111]"
-          aria-label="Open quick action"
-        >
-          <ArrowUpRight className="h-6 w-6" />
-        </Button>
+            <Button
+              asChild
+              className="h-11 rounded-lg bg-lime-300 px-7 font-semibold text-slate-950 hover:bg-lime-400"
+            >
+              <Link to="/register">Sign Up</Link>
+            </Button>
+
+            <Button
+              size="icon"
+              className="h-12 w-12 rounded-full bg-[#1f1f1f] text-lime-300 hover:bg-[#111111]"
+              aria-label="Open quick action"
+            >
+              <ArrowUpRight className="h-6 w-6" />
+            </Button>
+          </>
+        )}
       </div>
     </nav>
   );
