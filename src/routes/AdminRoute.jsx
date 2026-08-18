@@ -1,8 +1,8 @@
 import useAuth from "@/hooks/useAuth";
 import useRole from "../hooks/useRole";
 
-function AdminRoute(children) {
-  const {loading } = useAuth();
+function AdminRoute({ children }) {
+  const { loading } = useAuth();
   const { role, isRoleLoading } = useRole();
 
   if (loading || isRoleLoading) {
@@ -15,7 +15,7 @@ function AdminRoute(children) {
     );
   }
 
-  if (!role !== "admin") {
+  if (role !== "admin") {
     return <div>Access is forbidden</div>;
   }
   return children;
