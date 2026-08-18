@@ -39,18 +39,18 @@ function Navbar() {
         ))}
 
         <Button
-          asChild
+          render={<Link to="/rider" />}
           className="h-10 rounded-full bg-lime-300 px-6 font-semibold text-[#03373d] hover:bg-lime-400"
         >
-          <Link to="/rider">Be a Rider</Link>
+          Be a Rider
         </Button>
         {user && (
           <>
             <Button
-              asChild
+              render={<Link to="/dashboard/my-parcels" />}
               className="h-10 rounded-full bg-lime-300 px-6 font-semibold text-[#03373d] hover:bg-lime-400"
             >
-              <Link to="/dashboard/my-parcels">My parcels</Link>
+              My parcels
             </Button>
           </>
         )}
@@ -60,10 +60,10 @@ function Navbar() {
         {user ? (
           <>
             <Button
-              asChild
+              render={<Link to="/dashboard" />}
               className="h-11 rounded-lg bg-lime-300 px-7 font-semibold text-slate-950 hover:bg-lime-400"
             >
-              <Link to="/dashboard">Dashboard</Link>
+              Dashboard
             </Button>
 
             <Button
@@ -78,18 +78,18 @@ function Navbar() {
         ) : (
           <>
             <Button
-              asChild
+              render={<Link to="/login" />}
               variant="outline"
               className="hidden h-11 rounded-lg border-slate-200 px-7 font-semibold text-slate-700 hover:bg-slate-50 sm:inline-flex"
             >
-              <Link to="/login">Sign In</Link>
+              Sign In
             </Button>
 
             <Button
-              asChild
+              render={<Link to="/register" />}
               className="h-11 rounded-lg bg-lime-300 px-7 font-semibold text-slate-950 hover:bg-lime-400"
             >
-              <Link to="/register">Sign Up</Link>
+              Sign Up
             </Button>
 
             <Button
