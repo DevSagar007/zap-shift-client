@@ -10,20 +10,29 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
+import { Search } from "lucide-react";
+import { useState } from "react";
 
 function UsersManagement() {
+  // state
   const axiosSecure = useAxiosSecure();
-  // fetch data tanstack
+  const [searchText, setSearchText] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
+  // fetch data tanstack
   const {
     refetch,
     data: users = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", searchTerm],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users`);
+      const res = await axiosSecure.get("/users", {
+        params: {
+          searchTerm: searchTerm,
+        },
+      });
       return res.data;
     },
   });
@@ -36,8 +45,12 @@ function UsersManagement() {
     return <p className="text-center py-10">Failed to load users.</p>;
   }
 
-  console.log("Users Management", users);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(searchText.trim());
+  };
 
+  // handle make admin
   const handleMakeAdmin = (user) => {
     console.log("Make user:", user);
     const roleInfo = { role: "admin" };
@@ -52,18 +65,46 @@ function UsersManagement() {
       }
     });
   };
+
   const handleRemoveAdmin = (user) => {
     console.log("Make rider:", user);
   };
 
+  // handle delete
   const handleDelete = (user) => {
     console.log("Delete:", user);
   };
 
   return (
     <div>
-      <div className="text-4xl font-extrabold mb-5">
-        Users Management {users.length}
+      {/* Header */}
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div className="text-4xl font-extrabold">
+          Users Management{" "}
+          <span className="text-muted-foreground">({users.length})</span>
+        </div>
+
+        {/* Search */}
+        <form onSubmit={handleSearch} className="flex w-full max-w-sm gap-2">
+          <div className="relative flex-1">
+            <Search
+              size={18}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+
+            <input
+              type="search"
+              placeholder="Search users..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="h-11 w-full rounded-lg border bg-background pl-10 pr-4 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+            />
+          </div>
+
+          <Button type="submit" className="h-11">
+            Search
+          </Button>
+        </form>
       </div>
       <div className="rounded-xl border overflow-hidden">
         <Table>
