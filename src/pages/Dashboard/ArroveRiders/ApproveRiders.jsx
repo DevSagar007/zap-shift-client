@@ -77,7 +77,8 @@ function ApproveRiders() {
               <TableHead>Location</TableHead>
               <TableHead>License / NID</TableHead>
               <TableHead>Bike Info</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Application Status</TableHead>
+              <TableHead>Work Status</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -138,6 +139,10 @@ function ApproveRiders() {
                   >
                     {rider.status || "pending"}
                   </span>
+                </TableCell>
+
+                <TableCell>
+                  <p className="font-medium">{rider.workStatus}</p>
                 </TableCell>
 
                 <TableCell>
