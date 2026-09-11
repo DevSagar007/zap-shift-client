@@ -76,6 +76,7 @@ function MyParcels() {
               <TableHead>Parcel Info</TableHead>
               <TableHead>Recipient Info</TableHead>
               <TableHead>Tracking Number</TableHead>
+              <TableHead>Delivery Status</TableHead>
               <TableHead>Payment Info</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -113,6 +114,13 @@ function MyParcels() {
                 <TableCell>
                   <span className="font-medium">
                     {parcel.trackingId || "N/A"}
+                  </span>
+                </TableCell>
+
+                {/* deliveryStatus */}
+                <TableCell>
+                  <span className="font-medium">
+                    {parcel.deliveryStatus || "N/A"}
                   </span>
                 </TableCell>
 

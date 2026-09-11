@@ -76,6 +76,12 @@ export function AppSidebar(props) {
       },
 
       {
+        title: "Assign Riders",
+        url: "/dashboard/assign-riders",
+        icon: Bike,
+      },
+
+      {
         title: "Payment History",
         url: "/dashboard/payment-history",
         icon: Receipt,
