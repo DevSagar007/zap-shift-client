@@ -41,7 +41,11 @@ function Register() {
     e.preventDefault();
 
     try {
-      const result = await registerUser(formData.email, formData.password);
+      const result = await registerUser(
+        formData.name,
+        formData.email,
+        formData.password,
+      );
       const token = await result.user.getIdToken();
 
       const userInfo = {
