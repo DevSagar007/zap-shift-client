@@ -9,6 +9,7 @@ import {
   History,
   Wallet,
   Receipt,
+  Truck,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -25,18 +26,20 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import useRole from "../../hooks/useRole";
+import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router";
 
 export function AppSidebar(props) {
   const { role } = useRole();
+  const { user } = useAuth();
 
   console.log("use role:", role);
 
   const data = {
     user: {
-      name: "Zap Shift",
-      email: "dashboard@zapshift.com",
-      avatar: "/assets/customer-top.png",
+      name: user?.displayName || "Zap Shift",
+      email: user?.email || "dashboard@zapshift.com",
+      avatar: user?.photoURL || "/assets/customer-top.png",
     },
 
     navMain: [
@@ -46,40 +49,52 @@ export function AppSidebar(props) {
         icon: LayoutDashboard,
       },
 
-      // if role are admin
-      ...(role === "admin"
+      // shipper routes
+      ...(role !== "rider"
         ? [
             {
-              title: "Users Management",
-              url: "/dashboard/users-management",
-              icon: Users,
+              title: "My Parcels",
+              url: "/dashboard/my-parcels",
+              icon: Send,
+            },
+            {
+              title: "Create Parcel",
+              url: "/dashboard/create-parcel",
+              icon: PackagePlus,
+            },
+            {
+              title: "Parcel Tracking",
+              url: "/dashboard/tracking",
+              icon: MapPin,
+            },
+            {
+              title: "Parcel History",
+              url: "/dashboard/history",
+              icon: History,
             },
           ]
         : []),
 
-      {
-        title: "My Parcels",
-        url: "/dashboard/my-parcels",
-        icon: Send,
-      },
-
-      {
-        title: "Create Parcel",
-        url: "/dashboard/create-parcel",
-        icon: PackagePlus,
-      },
-
-      {
-        title: "Parcel Tracking",
-        url: "/dashboard/tracking",
-        icon: MapPin,
-      },
-
-      {
-        title: "Assign Riders",
-        url: "/dashboard/assign-riders",
-        icon: Bike,
-      },
+      // rider routes
+      ...(role === "rider"
+        ? [
+            {
+              title: "Assign Deliveries",
+              url: "/dashboard/assign-deliveries",
+              icon: Truck,
+            },
+            {
+              title: "Assigned Parcels",
+              url: "/dashboard/rider-parcels",
+              icon: Bike,
+            },
+            {
+              title: "My Deliveries",
+              url: "/dashboard/my-deliveries",
+              icon: History,
+            },
+          ]
+        : []),
 
       {
         title: "Payment History",
@@ -88,20 +103,24 @@ export function AppSidebar(props) {
       },
 
       {
-        title: "Parcel History",
-        url: "/dashboard/history",
-        icon: History,
-      },
-
-      {
         title: "Wallet",
         url: "/dashboard/wallet",
         icon: Wallet,
       },
 
-      // if role are admin
+      // admin routes
       ...(role === "admin"
         ? [
+            {
+              title: "Assign Riders",
+              url: "/dashboard/assign-riders",
+              icon: Bike,
+            },
+            {
+              title: "Users Management",
+              url: "/dashboard/users-management",
+              icon: Users,
+            },
             {
               title: "Approve Riders",
               url: "/dashboard/approve-riders",

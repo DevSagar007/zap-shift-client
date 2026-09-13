@@ -18,6 +18,7 @@ export default function DashboardLayout() {
               <SidebarTrigger className="-ml-1" />
               <span className="text-sm font-medium text-muted-foreground">
                 Dashboard
+                
               </span>
             </div>
           </header>
