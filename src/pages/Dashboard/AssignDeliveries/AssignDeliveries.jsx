@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import Swal from "sweetalert2";
 
 const AssignDeliveries = () => {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ const AssignDeliveries = () => {
     isPending,
     error,
     data: parcels = [],
+    refetch,
   } = useQuery({
     queryKey: ["parcels", user?.email, "assignDeliveries"],
     queryFn: async () => {
@@ -30,11 +32,33 @@ const AssignDeliveries = () => {
     },
   });
 
-  console.log("parcels", parcels);
+  const handleAcceptedDelivery = (parcel, status) => {
+    const statusInfo = {
+      deliveryStatus: status,
+    };
+
+    const message = `Parcel status is updated to ${status?.split("_").join(" ")}`;
+
+    axiosSecure
+      .patch(`/parcels/${parcel._id}/status`, statusInfo)
+      .then((res) => {
+        if (res.data.modifiedCount) {
+          refetch();
+
+          Swal.fire({
+            title: message,
+            text: "Your parcel status has been updated successfully.",
+            icon: "success",
+          });
+        }
+      });
+  };
 
   if (isPending) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
+
+  console.log("parcels", parcels);
 
   return (
     <div>
@@ -50,6 +74,7 @@ const AssignDeliveries = () => {
               <TableHead>Tracking Number</TableHead>
               <TableHead>Delivery Status</TableHead>
               <TableHead>Assigned At</TableHead>
+              <TableHead>Others Action</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -115,23 +140,45 @@ const AssignDeliveries = () => {
 
                   {/* Action */}
                   <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        className="bg-sky-100 text-black hover:bg-sky-200"
-                        // onClick={handleAcceptedDelivery()}
-                      >
-                        Accept
-                      </Button>
+                    {parcel.deliveryStatus === "diver_assigned" ? (
+                      <>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            className="bg-sky-100 text-black hover:bg-sky-200"
+                            onClick={() => handleAcceptedDelivery(parcel)}
+                          >
+                            Accept
+                          </Button>
 
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        // onClick={() => handleDelete(parcel._id)}
-                      >
-                        Reject
-                      </Button>
-                    </div>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            // onClick={() => handleDelete(parcel._id)}
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <span>Delivery Accepted</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      size="sm"
+                      className="bg-sky-100 text-black hover:bg-sky-200"
+                      onClick={() => handleAcceptedDelivery(parcel)}
+                    >
+                      Mark as Picked up
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      // onClick={() => handleDelete(parcel._id)}
+                    >
+                      Mark as Delivered
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -144,4 +191,3 @@ const AssignDeliveries = () => {
 };
 
 export default AssignDeliveries;
-
