@@ -72,6 +72,7 @@ const AssignRIders = () => {
       riderEmail: rider.email,
       riderPhone: rider.phone,
       parcelId: selectedParcel._id,
+      trackingId: selectedParcel.trackingId,
       deliveryStatus: "rider-assigned",
     };
 
