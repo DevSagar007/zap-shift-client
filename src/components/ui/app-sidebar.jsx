@@ -12,6 +12,7 @@ import {
   Truck,
   UserCheck,
   Users,
+  CheckCircle,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
@@ -92,6 +93,11 @@ export function AppSidebar(props) {
               title: "My Deliveries",
               url: "/dashboard/my-deliveries",
               icon: History,
+            },
+            {
+              title: "Completed Deliveries",
+              url: "/dashboard/completed-deliveries",
+              icon: CheckCircle,
             },
           ]
         : []),

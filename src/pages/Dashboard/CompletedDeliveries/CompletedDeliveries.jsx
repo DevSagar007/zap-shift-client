@@ -10,9 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import Swal from "sweetalert2";
 
-const AssignDeliveries = () => {
+function CompletedDeliveries() {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
@@ -20,52 +19,38 @@ const AssignDeliveries = () => {
     isPending,
     error,
     data: parcels = [],
-    refetch,
   } = useQuery({
-    queryKey: ["parcels", user?.email, "assignDeliveries"],
+    queryKey: ["parcels", user?.email, "completedDeliveries"],
+
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/parcels/riders?riderEmail=${user.email}&deliveryStatus=diver_assigned`,
+        `/parcels/riders?riderEmail=${user.email}&deliveryStatus=parcel_delivered`,
       );
 
       return res.data;
     },
   });
 
-  const handleAcceptedDelivery = (parcel, status) => {
-    const statusInfo = {
-      deliveryStatus: status,
-      riderId: parcel.riderId,
-    };
+  // Calculate rider payout
+  const calculatePayout = (parcel) => {
+    if (parcel.senderDistrict === parcel.receiverDistrict) {
+      return parcel.parcelCost * 0.8;
+    }
 
-    const message = `Parcel status is updated to ${status?.split("_").join(" ")}`;
-
-    axiosSecure
-      .patch(`/parcels/${parcel._id}/status`, statusInfo)
-      .then((res) => {
-        if (res.data.modifiedCount) {
-          refetch();
-
-          Swal.fire({
-            title: message,
-            text: "Your parcel status has been updated successfully.",
-            icon: "success",
-          });
-        }
-      });
+    return parcel.parcelCost * 0.6;
   };
 
   if (isPending) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
 
-  console.log("parcels", parcels);
-
   return (
     <div>
+      {/* Header */}
       <h2 className="text-4xl font-extrabold mb-5">
-        Parcels pending pickup: {parcels.length}
+        Completed Deliveries: {parcels.length}
       </h2>
+
       <div className="rounded-xl border overflow-hidden">
         <Table>
           <TableHeader>
@@ -74,8 +59,10 @@ const AssignDeliveries = () => {
               <TableHead>Receiver Info</TableHead>
               <TableHead>Tracking Number</TableHead>
               <TableHead>Delivery Status</TableHead>
-              <TableHead>Assigned At</TableHead>
-              <TableHead>Others Action</TableHead>
+              <TableHead>Completed At</TableHead>
+              <TableHead>Cost</TableHead>
+              <TableHead>Payout</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -83,47 +70,56 @@ const AssignDeliveries = () => {
             {parcels.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={5}
+                  colSpan={8}
                   className="text-center py-10 text-muted-foreground"
                 >
-                  No parcels pending pickup
+                  No completed deliveries found
                 </TableCell>
               </TableRow>
             ) : (
               parcels.map((parcel) => (
                 <TableRow key={parcel._id}>
+                  {/* Parcel Info */}
                   <TableCell>
                     <p className="font-medium">{parcel.parcelName}</p>
+
                     <p className="text-sm text-muted-foreground capitalize">
                       {parcel.parcelType} · {parcel.parcelWeight} kg
                     </p>
                   </TableCell>
 
+                  {/* Receiver Info */}
                   <TableCell>
                     <div className="space-y-1">
                       <p className="font-medium">{parcel.receiverName}</p>
+
                       <p className="text-sm text-muted-foreground">
                         {parcel.receiverAddress}
                       </p>
+
                       <p className="text-sm text-muted-foreground">
                         {parcel.receiverDistrict}, {parcel.receiverRegion}
                       </p>
+
                       <p className="text-sm">{parcel.receiverContact}</p>
                     </div>
                   </TableCell>
 
+                  {/* Tracking Number */}
                   <TableCell>
                     <span className="font-medium">
                       {parcel.trackingId || "N/A"}
                     </span>
                   </TableCell>
 
+                  {/* Delivery Status */}
                   <TableCell>
-                    <span className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-medium capitalize text-sky-700">
-                      {parcel.deliveryStatus?.replaceAll("-", " ") || "N/A"}
+                    <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                      Completed
                     </span>
                   </TableCell>
 
+                  {/* Completed At */}
                   <TableCell>
                     <span className="font-medium">
                       {parcel.createdAt
@@ -139,50 +135,28 @@ const AssignDeliveries = () => {
                     </span>
                   </TableCell>
 
-                  {/* Action */}
+                  {/* Parcel Cost */}
                   <TableCell>
-                    {parcel.deliveryStatus === "diver_assigned" ? (
-                      <>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            className="bg-sky-100 text-black hover:bg-sky-200"
-                            onClick={() => handleAcceptedDelivery(parcel)}
-                          >
-                            Accept
-                          </Button>
-
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            // onClick={() => handleDelete(parcel._id)}
-                          >
-                            Reject
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      <span>Delivery Accepted</span>
-                    )}
+                    <span className="font-medium">
+                      ৳{parcel.parcelCost || 0}
+                    </span>
                   </TableCell>
+
+                  {/* Rider Payout */}
+                  <TableCell>
+                    <span className="font-semibold text-green-600">
+                      ৳{calculatePayout(parcel).toFixed(2)}
+                    </span>
+                  </TableCell>
+
+                  {/* Action */}
                   <TableCell>
                     <Button
                       size="sm"
                       className="bg-sky-100 text-black hover:bg-sky-200"
-                      onClick={() =>
-                        handleAcceptedDelivery(parcel, "parcel_picked_up")
-                      }
+                      // onClick={() => handleAcceptedDelivery(parcel)}
                     >
-                      Mark as Picked up
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() =>
-                        handleAcceptedDelivery(parcel, "parcel_delivered")
-                      }
-                    >
-                      Mark as Delivered
+                      Cashout
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -193,6 +167,6 @@ const AssignDeliveries = () => {
       </div>
     </div>
   );
-};
+}
 
-export default AssignDeliveries;
+export default CompletedDeliveries;
