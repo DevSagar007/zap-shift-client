@@ -113,7 +113,7 @@ function MyParcels() {
                 {/* Tracking */}
                 <TableCell>
                   <span className="font-medium">
-                    {parcel.trackingId || "N/A"}
+                  <Link to={`/parcel-track/${parcel.trackingId}`}> {parcel.trackingId || "N/A"}</Link>
                   </span>
                 </TableCell>
 

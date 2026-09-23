@@ -22,6 +22,7 @@ import RiderParcels from "../pages/Dashboard/RiderParcels/RiderParcels";
 import MyDeliveries from "../pages/Dashboard/MyDeliveries/MyDeliveries";
 import AssignDeliveries from "../pages/Dashboard/AssignDeliveries/AssignDeliveries";
 import CompletedDeliveries from "../pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
+import ParcelTrack from "../pages/ParcelTrack/ParcelTrack";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,12 @@ export const router = createBrowserRouter([
     loader: () => fetch("/serviceCentets.json").then((res) => res.json()),
   },
   {
+    path: "parcel-track/:trackingId",
+    Component: ParcelTrack
+  },
+
+  {
+    // only auth routes
     path: "/",
     Component: AuthLayout,
     children: [

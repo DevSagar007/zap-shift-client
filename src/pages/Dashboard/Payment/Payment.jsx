@@ -24,6 +24,7 @@ function Payment() {
         parcelId: parcel._id,
         senderEmail: parcel.senderEmail,
         parcelName: parcel.parcelName,
+        trackingId: parcel.trackingId
       };
 
       console.log(paymentInfo);
