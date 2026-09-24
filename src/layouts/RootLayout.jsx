@@ -1,13 +1,15 @@
-import Footer from '@/pages/Shared/Footer/Footer';
-import { Outlet } from 'react-router';
+import Footer from "@/pages/Shared/Footer/Footer";
+import { Outlet } from "react-router";
+import Header from "../pages/Shared/Header/Header";
 
 function RootLayout() {
   return (
     <div>
-        <Outlet></Outlet>
-        <Footer></Footer>
+      <Header></Header>
+      <Outlet></Outlet>
+      <Footer></Footer>
     </div>
-  )
+  );
 }
 
-export default RootLayout
+export default RootLayout;
