@@ -4,12 +4,15 @@ import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Search } from "lucide-react";
 import "leaflet/dist/leaflet.css";
+import { useLoaderData } from "react-router";
 
 const position = [23.8103, 90.4125];
-
 const Coverage = () => {
   const [search, setSearch] = useState("");
+  const serviceCenters = useLoaderData();
+  console.log("serviceCenters", serviceCenters);
 
+  // handle search
   const handleSearch = (e) => {
     e.preventDefault();
 
@@ -139,7 +142,7 @@ const Coverage = () => {
         ========================================= */}
         <div
           className="
-            h-[360px]
+            h-[660px]
             w-full
             overflow-hidden
 
@@ -160,9 +163,14 @@ const Coverage = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <Marker position={position}>
-              <Popup>We deliver almost all over Bangladesh.</Popup>
-            </Marker>
+            {serviceCenters.map((center) => (
+              <Marker position={[center.latitude, center?.longitude]}>
+                <Popup>
+                  {`We deliver almost all over ${center.district}`} <br />
+                  <span> Service Area: {center.covered_area.join(",")}</span>
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
       </div>

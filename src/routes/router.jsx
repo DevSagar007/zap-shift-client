@@ -35,9 +35,10 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path:'coverage',
-        Component: Coverage
-      }
+        path: "coverage",
+        Component: Coverage,
+        loader: () => fetch("/serviceCentets.json").then((res) => res.json()),
+      },
     ],
   },
   {
@@ -60,7 +61,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "parcel-track/:trackingId",
-    Component: ParcelTrack
+    Component: ParcelTrack,
   },
 
   {
@@ -135,7 +136,7 @@ export const router = createBrowserRouter([
         path: "completed-deliveries",
         element: (
           <RiderRoute>
-          <CompletedDeliveries></CompletedDeliveries>
+            <CompletedDeliveries></CompletedDeliveries>
           </RiderRoute>
         ),
       },
@@ -155,7 +156,7 @@ export const router = createBrowserRouter([
             <AssignRIders></AssignRIders>
           </AdminRoute>
         ),
-      }, 
+      },
       {
         path: "users-management",
         element: (
