@@ -19,7 +19,7 @@ function Payment() {
 
   const handlePayment = async () => {
     try {
-      const paymentInfo = {
+      const parcelInfo = {
         cost: parcel.parcelCost,
         parcelId: parcel._id,
         senderEmail: parcel.senderEmail,
@@ -27,11 +27,11 @@ function Payment() {
         trackingId: parcel.trackingId
       };
 
-      console.log(paymentInfo);
+      console.log(parcelInfo);
 
       const res = await axiosSecure.post(
         "/create-checkout-session",
-        paymentInfo,
+        parcelInfo,
       );
 
       console.log(res.data);
