@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Search } from "lucide-react";
 import "leaflet/dist/leaflet.css";
@@ -10,11 +10,26 @@ const position = [23.8103, 90.4125];
 const Coverage = () => {
   const [search, setSearch] = useState("");
   const serviceCenters = useLoaderData();
+  const mapRef = useRef(null);
+
   console.log("serviceCenters", serviceCenters);
 
   // handle search
   const handleSearch = (e) => {
     e.preventDefault();
+    const location = search.trim();
+
+    if (!location) return;
+
+    const district = serviceCenters.find((c) =>
+      c.district.toLowerCase().includes(location.toLowerCase()),
+    );
+
+    if (district) {
+      const coord = [district.latitude, district.longitude];
+      console.log(district, coord);
+      mapRef.current?.flyTo(coord, 14);
+    }
 
     console.log("Search:", search);
   };
@@ -152,9 +167,10 @@ const Coverage = () => {
           "
         >
           <MapContainer
+            ref={mapRef}
             center={position}
-            zoom={7}
-            scrollWheelZoom={false}
+            zoom={2}
+            scrollWheelZoom
             zoomControl={false}
             className="!h-full !w-full"
           >

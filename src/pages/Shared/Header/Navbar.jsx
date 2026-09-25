@@ -27,7 +27,7 @@ function Navbar() {
         <Logo />
       </Link>
 
-      <div className="hidden items-center gap-8 lg:flex">
+      <div className="hidden items-center gap-6 lg:flex">
         {navLinks.map((item) => (
           <Link
             key={item.href}
