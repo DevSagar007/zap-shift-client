@@ -55,7 +55,7 @@ function PaymentHistory() {
   };
   return (
     <div>
-      <div className="text-4xl font-extrabold mb-5">
+      <div className="text-4xl font-semibold mb-5">
         Payment History {payments.length}
       </div>
       <div className="rounded-xl border overflow-hidden">

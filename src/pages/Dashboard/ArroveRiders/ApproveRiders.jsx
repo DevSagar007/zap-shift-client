@@ -65,7 +65,7 @@ function ApproveRiders() {
 
   return (
     <div>
-      <h2 className="text-4xl font-extrabold mb-5">
+      <h2 className="text-4xl font-semibold mb-5">
         Approve Riders : {riders.length}
       </h2>
 

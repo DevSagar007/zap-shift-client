@@ -47,7 +47,7 @@ function CompletedDeliveries() {
   return (
     <div>
       {/* Header */}
-      <h2 className="text-4xl font-extrabold mb-5">
+      <h2 className="text-4xl font-semibold mb-5">
         Completed Deliveries: {parcels.length}
       </h2>
 

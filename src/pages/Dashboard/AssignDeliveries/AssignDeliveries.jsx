@@ -64,7 +64,7 @@ const AssignDeliveries = () => {
 
   return (
     <div>
-      <h2 className="text-4xl font-extrabold mb-5">
+      <h2 className="text-4xl font-semibold mb-5">
         Parcels pending pickup: {parcels.length}
       </h2>
       <div className="rounded-xl border overflow-hidden">
