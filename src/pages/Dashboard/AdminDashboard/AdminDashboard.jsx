@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import ReactApexChart from "react-apexcharts";
 import {
   CheckCircle2,
   Clock3,
@@ -47,6 +48,8 @@ const formatCount = (count) => count.toLocaleString();
 const getStatusDetails = (status) =>
   deliveryStatusDetails[status] || fallbackStatusDetails;
 
+const chartColors = ["#0EA5E9", "#14B8A6", "#F59E0B", "#F43F5E", "#8B5CF6"];
+
 const AdminDashboard = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -57,6 +60,49 @@ const AdminDashboard = () => {
       return res.data;
     },
   });
+
+  const chartOptions = {
+    chart: {
+      type: "donut",
+      toolbar: { show: false },
+    },
+    labels: deliveryStats.map((stat) => getStatusDetails(stat.status ?? stat._id).title),
+    colors: chartColors,
+    plotOptions: {
+      pie: {
+        borderRadius: 12,
+        dataLabels: { offset: 0 },
+        donut: {
+          size: "68%",
+          labels: {
+            show: true,
+            total: {
+              show: true,
+              label: "Total Parcels",
+              formatter: (w) =>
+                w.globals.seriesTotals.reduce((total, count) => total + count, 0),
+            },
+          },
+        },
+      },
+    },
+    stroke: { width: 0 },
+    dataLabels: { enabled: false },
+    legend: {
+      position: "bottom",
+      fontSize: "13px",
+      labels: { colors: "#64748B" },
+    },
+    responsive: [
+      {
+        breakpoint: 640,
+        options: {
+          chart: { width: "100%" },
+          legend: { position: "bottom" },
+        },
+      },
+    ],
+  };
 
   return (
     <div>
@@ -94,6 +140,23 @@ const AdminDashboard = () => {
           );
         })}
       </div>
+
+      {deliveryStats.length > 0 && (
+        <div className="mt-6 rounded-lg border border-border bg-surface p-5 shadow-card">
+          <h3 className="text-lg font-bold text-text-primary">
+            Parcels by Delivery Status
+          </h3>
+          <div className="mt-2 flex justify-center">
+            <ReactApexChart
+              options={chartOptions}
+              series={deliveryStats.map((stat) => stat.count)}
+              type="donut"
+              width="100%"
+              height={380}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
