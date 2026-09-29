@@ -4,7 +4,7 @@ import useAuth from "./useAuth";
 import { useNavigation } from "react-router";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://zap-shift-server-nine-ashy.vercel.app",
   timeout: 5000,
 });
 
