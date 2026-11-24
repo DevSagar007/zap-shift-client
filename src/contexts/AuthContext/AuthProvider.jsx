@@ -10,6 +10,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { API_URL } from "../../config/api";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -18,32 +19,58 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const syncServerSession = async (firebaseUser) => {
+    const idToken = await firebaseUser.getIdToken();
+    const response = await fetch(`${API_URL}/auth/session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ idToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not create a secure Zap Shift session.");
+    }
+  };
+
   // register user
   const registerUser = async (name, email, password) => {
     setLoading(true);
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName: name });
+    await syncServerSession(result.user);
     setUser(auth.currentUser);
     setLoading(false);
     return result;
   };
 
   // signin User
-  const signInUser = (email, password) => {
+  const signInUser = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    await syncServerSession(result.user);
+    return result;
   };
 
   // signin Google
-  const signInGoogle = () => {
+  const signInGoogle = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    const result = await signInWithPopup(auth, googleProvider);
+    await syncServerSession(result.user);
+    return result;
   };
 
   // sign out user
-  const signOutUser = () => {
+  const signOutUser = async () => {
     setLoading(true);
-    return signOut(auth);
+    try {
+      await fetch(`${API_URL}/auth/session`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+    } finally {
+      await signOut(auth);
+    }
   };
 
   // auth state observer
@@ -51,7 +78,6 @@ function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-      console.log(currentUser, "currentUser");
     });
 
     return () => unsubscribe();

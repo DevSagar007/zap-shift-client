@@ -46,8 +46,6 @@ function Register() {
         formData.email,
         formData.password,
       );
-      const token = await result.user.getIdToken();
-
       const userInfo = {
         name: formData.name,
         email: result.user.email,
@@ -56,11 +54,7 @@ function Register() {
         createdAt: new Date().toISOString(),
       };
 
-      const response = await axiosSecure.post("/users", userInfo, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosSecure.post("/users", userInfo);
 
       console.log("User created in database:", response.data);
 

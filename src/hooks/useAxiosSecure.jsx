@@ -1,26 +1,34 @@
 import axios from "axios";
 import { useEffect } from "react";
 import useAuth from "./useAuth";
-import { useNavigation } from "react-router";
+import { useNavigate } from "react-router";
+import { API_URL } from "../config/api";
 
 const axiosSecure = axios.create({
-  baseURL: "https://zap-shift-server-nine-ashy.vercel.app",
+  baseURL: API_URL,
   timeout: 5000,
+  withCredentials: true,
 });
 
+const readCookie = (name) =>
+  document.cookie
+    .split("; ")
+    .find((cookie) => cookie.startsWith(`${name}=`))
+    ?.split("=")[1];
+
 const useAxiosSecure = () => {
-  const { user, signOutUser } = useAuth();
-  const navigate = useNavigation();
+  const { signOutUser } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const requestInterceptor = axiosSecure.interceptors.request.use(
       async (config) => {
-        if (user) {
-          const token = await user.getIdToken();
-
-          config.headers.Authorization = `Bearer ${token}`;
+        if (!["get", "head", "options"].includes(config.method?.toLowerCase())) {
+          const csrfToken = readCookie("zap_shift_csrf");
+          if (csrfToken) {
+            config.headers["X-CSRF-Token"] = csrfToken;
+          }
         }
-
         return config;
       },
       (error) => {
@@ -35,7 +43,7 @@ const useAxiosSecure = () => {
           "Axios response error:",
           error.response?.data || error.message,
         );
-        const statusCode = error.status;
+        const statusCode = error.response?.status;
         if (statusCode === 401 || statusCode === 403) {
           signOutUser().then(() => {
             navigate("/login");
@@ -51,7 +59,7 @@ const useAxiosSecure = () => {
 
       axiosSecure.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, signOutUser, navigate]);
+  }, [signOutUser, navigate]);
 
   return axiosSecure;
 };

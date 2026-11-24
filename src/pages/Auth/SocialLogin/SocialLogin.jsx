@@ -17,8 +17,6 @@ const SocialLogin = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInGoogle();
-      const token = await result.user.getIdToken();
-
       const userInfo = {
         name: result.user.displayName,
         email: result.user.email,
@@ -27,11 +25,7 @@ const SocialLogin = () => {
         createdAt: new Date().toISOString(),
       };
 
-      const response = await axiosSecure.post("/users", userInfo, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosSecure.post("/users", userInfo);
       console.log("User created in database:", response.data);
 
       navigate(redirectPath, { replace: true });

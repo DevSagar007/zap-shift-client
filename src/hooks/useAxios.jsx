@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 const axiosInstance = axios.create({
-  baseURL: "https://zap-shift-server-nine-ashy.vercel.app",
+  baseURL: API_URL,
   timeout: 5000,
 });
 
