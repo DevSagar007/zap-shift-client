@@ -3,18 +3,13 @@ import { useEffect } from "react";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
 import { API_URL } from "../config/api";
+import { getCsrfToken } from "../auth/session";
 
 const axiosSecure = axios.create({
   baseURL: API_URL,
   timeout: 5000,
   withCredentials: true,
 });
-
-const readCookie = (name) =>
-  document.cookie
-    .split("; ")
-    .find((cookie) => cookie.startsWith(`${name}=`))
-    ?.split("=")[1];
 
 const useAxiosSecure = () => {
   const { signOutUser } = useAuth();
@@ -24,7 +19,7 @@ const useAxiosSecure = () => {
     const requestInterceptor = axiosSecure.interceptors.request.use(
       async (config) => {
         if (!["get", "head", "options"].includes(config.method?.toLowerCase())) {
-          const csrfToken = readCookie("zap_shift_csrf");
+          const csrfToken = getCsrfToken();
           if (csrfToken) {
             config.headers = config.headers || {};
             config.headers["X-CSRF-Token"] = csrfToken;

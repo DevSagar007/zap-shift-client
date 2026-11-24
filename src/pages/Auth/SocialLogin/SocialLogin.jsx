@@ -41,7 +41,12 @@ const SocialLogin = () => {
         "auth/unauthorized-domain": "This website domain is not authorized for Google sign-in.",
         "auth/account-exists-with-different-credential": "An account already exists with another sign-in method.",
       };
-      setErrorMessage(messages[error.code] || "Google sign-in failed. Please try again.");
+      setErrorMessage(
+        messages[error.code] ||
+          error.response?.data?.message ||
+          error.message ||
+          "Google sign-in failed. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }

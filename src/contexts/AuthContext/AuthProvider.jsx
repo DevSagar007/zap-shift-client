@@ -12,6 +12,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { API_URL } from "../../config/api";
+import { clearCsrfToken, setCsrfToken } from "../../auth/session";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -32,6 +33,9 @@ function AuthProvider({ children }) {
     if (!response.ok) {
       throw new Error("Could not create a secure Zap Shift session.");
     }
+
+    const session = await response.json();
+    setCsrfToken(session.csrfToken);
   };
 
   // register user
@@ -84,6 +88,7 @@ function AuthProvider({ children }) {
       });
     } finally {
       await signOut(auth);
+      clearCsrfToken();
       setLoading(false);
     }
   };
