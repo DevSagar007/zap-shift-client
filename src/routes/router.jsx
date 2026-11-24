@@ -2,6 +2,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import RootLayout from "@/layouts/RootLayout";
 import Login from "@/pages/Auth/Login/Login";
 import Register from "@/pages/Auth/Register/Register";
+import ForgotPassword from "@/pages/Auth/ForgotPassword/ForgotPassword";
 import Home from "@/pages/Home/Home";
 import { createBrowserRouter } from "react-router";
 import PrivateRoute from "./PrivateRoute";
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "forgot-password",
+        Component: ForgotPassword,
       },
     ],
   },

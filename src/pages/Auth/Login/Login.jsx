@@ -24,6 +24,8 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -34,14 +36,23 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log("Login Data:", formData);
+    setErrorMessage("");
+    setIsSubmitting(true);
     signInUser(formData.email, formData.password)
       .then(() => {
         navigate(redirectPath, { replace: true });
       })
       .catch((error) => {
-        console.log(error);
+        const messages = {
+          "auth/invalid-credential": "Email or password is incorrect.",
+          "auth/invalid-email": "Please enter a valid email address.",
+          "auth/user-disabled": "This account has been disabled.",
+          "auth/too-many-requests": "Too many attempts. Please try again later.",
+        };
+        setErrorMessage(messages[error.code] || "Login failed. Please try again.");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -64,6 +75,12 @@ export default function LoginPage() {
                   Login with ZapShift
                 </p>
               </div>
+
+              {errorMessage && (
+                <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+                  {errorMessage}
+                </p>
+              )}
 
               <form onSubmit={handleSubmit} className="mt-8 space-y-4">
                 {/* Email */}
@@ -101,19 +118,21 @@ export default function LoginPage() {
                 </div>
 
                 {/* Forget Password */}
-                <a
-                  href="/forgot-password"
+                <Link
+                  to="/forgot-password"
+                  state={location?.state}
                   className="inline-block text-sm text-muted-foreground underline decoration-muted-foreground underline-offset-2 transition-colors hover:text-foreground"
                 >
                   Forgot password?
-                </a>
+                </Link>
 
                 {/* Login Button */}
                 <Button
                   type="submit"
+                  disabled={isSubmitting}
                   className="h-10 w-full bg-lime-300 font-semibold text-slate-900 hover:bg-lime-400"
                 >
-                  Login
+                  {isSubmitting ? "Signing in..." : "Login"}
                 </Button>
               </form>
 

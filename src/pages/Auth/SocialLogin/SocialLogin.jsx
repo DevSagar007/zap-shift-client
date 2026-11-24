@@ -2,12 +2,15 @@ import { Button } from "@/components/ui/button";
 import useAuth from "../../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useState } from "react";
 
 const SocialLogin = () => {
   const { signInGoogle } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const from = location.state?.from;
   const redirectPath = from
@@ -15,6 +18,8 @@ const SocialLogin = () => {
     : "/";
 
   const handleGoogleSignIn = async () => {
+    setErrorMessage("");
+    setIsSubmitting(true);
     try {
       const result = await signInGoogle();
       const userInfo = {
@@ -30,7 +35,15 @@ const SocialLogin = () => {
 
       navigate(redirectPath, { replace: true });
     } catch (error) {
-      console.error("Google sign-in failed:", error);
+      const messages = {
+        "auth/popup-closed-by-user": "Google sign-in was cancelled.",
+        "auth/popup-blocked": "Please allow popups for Zap Shift to continue.",
+        "auth/unauthorized-domain": "This website domain is not authorized for Google sign-in.",
+        "auth/account-exists-with-different-credential": "An account already exists with another sign-in method.",
+      };
+      setErrorMessage(messages[error.code] || "Google sign-in failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -39,12 +52,16 @@ const SocialLogin = () => {
       <Button
         onClick={handleGoogleSignIn}
         type="button"
+        disabled={isSubmitting}
         variant="secondary"
         className="mt-4 h-10 w-full gap-2"
       >
         <GoogleIcon />
-        Login with Google
+        {isSubmitting ? "Connecting to Google..." : "Login with Google"}
       </Button>
+      {errorMessage && (
+        <p className="mt-2 text-center text-sm text-red-600">{errorMessage}</p>
+      )}
     </div>
   );
 };

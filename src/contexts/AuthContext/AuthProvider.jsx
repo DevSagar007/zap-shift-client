@@ -8,6 +8,7 @@ import {
   signOut,
   signInWithPopup,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   updateProfile,
 } from "firebase/auth";
 import { API_URL } from "../../config/api";
@@ -71,6 +72,8 @@ function AuthProvider({ children }) {
     }
   };
 
+  const resetPassword = (email) => sendPasswordResetEmail(auth, email);
+
   // sign out user
   const signOutUser = async () => {
     setLoading(true);
@@ -102,6 +105,7 @@ function AuthProvider({ children }) {
     registerUser,
     signInUser,
     signInGoogle,
+    resetPassword,
     signOutUser,
   };
 
