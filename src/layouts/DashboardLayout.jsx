@@ -14,7 +14,6 @@ import {
   UserRound,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,11 +44,10 @@ function DashboardUserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
+            type="button"
             aria-label="Open user menu"
-            className="size-10 rounded-full bg-lime-100 text-[#03373d] hover:bg-lime-200"
+            className="inline-flex size-10 items-center justify-center rounded-full p-1 text-[#03373d] outline-none transition-colors hover:bg-lime-200 focus-visible:ring-2 focus-visible:ring-lime-400"
           />
         }
       >
