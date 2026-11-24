@@ -115,7 +115,7 @@ function RiderParcels() {
                   </TableCell>
 
                   <TableCell>
-                    <span>৳ {parcel.parcelCost || 0}</span>
+                    <span>BDT {parcel.parcelCost || 0}</span>
                   </TableCell>
 
                   <TableCell>

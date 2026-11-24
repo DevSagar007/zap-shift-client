@@ -231,7 +231,7 @@ const AssignRIders = () => {
                       </span>
 
                       <p className="text-sm font-medium">
-                        ৳ {parcel.parcelCost || 0}
+                        BDT {parcel.parcelCost || 0}
                       </p>
                     </div>
                   </TableCell>

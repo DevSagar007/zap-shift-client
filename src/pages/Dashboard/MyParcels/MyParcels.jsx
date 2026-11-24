@@ -143,7 +143,7 @@ function MyParcels() {
                 {/* Payment */}
                 <TableCell>
                   {parcel.paymentStatus === "paid" ? (
-                    <span>৳ {parcel.parcelCost} (Paid)</span>
+                    <span>BDT {parcel.parcelCost} (Paid)</span>
                   ) : (
                     <Link to={`/dashboard/payment/${parcel._id}`}>
                       <Button size="sm" variant="destructive">

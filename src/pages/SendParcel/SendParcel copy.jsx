@@ -131,7 +131,7 @@ function SendParcel() {
     data.parcelCost = parcelCost;
     Swal.fire({
       title: "Confirm Booking?",
-      text: `Please review your parcel details before confirming the booking ${parcelCost} Taka`,
+      text: `Please review your parcel details before confirming the booking BDT ${parcelCost}`,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#22c55e",

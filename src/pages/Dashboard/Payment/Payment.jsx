@@ -128,7 +128,7 @@ function Payment() {
               Amount due
             </span>
             <span className="text-3xl font-bold text-[#03373d]">
-              ${amount.toFixed(2)}
+              BDT {amount.toFixed(2)}
             </span>
           </div>
         </div>

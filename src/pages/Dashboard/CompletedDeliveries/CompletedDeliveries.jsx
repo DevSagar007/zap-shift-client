@@ -159,14 +159,14 @@ function CompletedDeliveries() {
                   {/* Parcel Cost */}
                   <TableCell>
                     <span className="font-medium">
-                      ৳{parcel.parcelCost || 0}
+                      BDT {parcel.parcelCost || 0}
                     </span>
                   </TableCell>
 
                   {/* Rider Payout */}
                   <TableCell>
                     <span className="font-semibold text-green-600">
-                      ৳{calculatePayout(parcel).toFixed(2)}
+                      BDT {calculatePayout(parcel).toFixed(2)}
                     </span>
                   </TableCell>
 

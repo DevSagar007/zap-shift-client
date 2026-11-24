@@ -156,7 +156,7 @@ function PaymentHistory() {
 
                   <TableCell>
                     {parcel.paymentStatus === "paid" ? (
-                      <span>৳ {parcel.amount} (Paid)</span>
+                      <span>BDT {parcel.amount} (Paid)</span>
                     ) : (
                       <Link to={`/dashboard/payment/${parcel._id}`}>
                         <Button size="sm" variant="destructive">
