@@ -92,9 +92,9 @@ function RiderRegister() {
           </h1>
 
           <p className="mt-5 max-w-xl text-sm leading-6 text-muted-foreground">
-            Enjoy fast, reliable parcel delivery with real-time tracking and
-            zero hassle. From personal packages to business shipments — we
-            deliver on time, every time.
+            Join the Zap Shift delivery network and help customers move parcels
+            safely across Bangladesh. Approved riders receive delivery tasks,
+            update parcel status, and earn payouts for completed deliveries.
           </p>
         </div>
 

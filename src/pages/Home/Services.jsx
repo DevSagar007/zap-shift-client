@@ -49,9 +49,9 @@ export default function Services() {
           <h2 className="mb-6 text-5xl font-bold text-white">Our Services</h2>
 
           <p className="text-lg leading-8 text-white/80">
-            Enjoy fast, reliable parcel delivery with real-time tracking and
+            Send documents, personal packages, and business shipments with
             zero hassle. From personal packages to business shipments — we
-            deliver on time, every time.
+            clear pricing, secure payment, and real-time tracking.
           </p>
         </div>
 

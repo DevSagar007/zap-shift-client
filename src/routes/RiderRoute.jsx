@@ -15,7 +15,7 @@ function RiderRoute({ children }) {
   }
 
   if (role !== "rider") {
-    return <div>Access is forbidden</div>;
+    return <div className="p-8 text-center text-slate-600">This page is available to approved Zap Shift riders only.</div>;
   }
 
   return children;

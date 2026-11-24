@@ -11,7 +11,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const deliveryStatusDetails = {
   diver_assigned: {
-    title: "Driver Assigned",
+    title: "Rider Assigned",
     icon: Truck,
     iconClass: "border-info/20 bg-info-soft text-info-text",
   },
@@ -106,7 +106,9 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <h2 className="text-4xl font-extrabold mb-5">Admin Dashboard</h2>
+      <p className="text-sm font-semibold uppercase tracking-wide text-[#0B3F45]">Operations control center</p>
+      <h2 className="mt-2 text-4xl font-extrabold">Admin Dashboard</h2>
+      <p className="mb-5 mt-2 text-slate-600">Monitor parcel flow, assign riders, manage users, and approve new rider applications.</p>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         {deliveryStats.map((stat) => {
           const details = getStatusDetails(stat._id);
@@ -134,7 +136,7 @@ const AdminDashboard = () => {
               </p>
 
               <p className="mt-3 text-sm text-text-muted">
-                Parcels in this status
+                Parcels currently in this stage
               </p>
             </div>
           );
@@ -144,7 +146,7 @@ const AdminDashboard = () => {
       {deliveryStats.length > 0 && (
         <div className="mt-6 rounded-lg border border-border bg-surface p-5 shadow-card">
           <h3 className="text-lg font-bold text-text-primary">
-            Parcels by Delivery Status
+            Parcel Delivery Overview
           </h3>
           <div className="mt-2 flex justify-center">
             <ReactApexChart

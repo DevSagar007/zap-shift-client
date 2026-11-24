@@ -150,7 +150,7 @@ function SendParcel() {
             Swal.fire({
               position: "top-center",
               icon: "success",
-              title: "Please continue to payment work has been save",
+              title: "Parcel booking saved",
               showConfirmButton: false,
               timer: 1500,
             });
@@ -169,7 +169,7 @@ function SendParcel() {
     <main className="min-h-screen bg-white px-6 py-12 text-[#03373d] sm:px-10 lg:px-20">
       <section className="mx-auto max-w-7xl">
         <h1 className="text-4xl font-black sm:text-5xl">
-          Send A Parcel
+          Send a Parcel with Zap Shift
         </h1>
 
         <form
@@ -178,7 +178,7 @@ function SendParcel() {
           noValidate
         >
           <h2 className="text-2xl font-extrabold">
-            Enter your parcel details
+            Tell us where your parcel is going
           </h2>
 
           <Separator className="my-8" />

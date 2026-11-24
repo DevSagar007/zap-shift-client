@@ -64,7 +64,7 @@ export function AppSidebar(props) {
               icon: MapPin,
             },
             {
-              title: "Parcel History",
+              title: "Delivery History",
               url: "/dashboard/history",
               icon: History,
             },
@@ -75,7 +75,7 @@ export function AppSidebar(props) {
       ...(role === "rider"
         ? [
             {
-              title: "Assign Deliveries",
+              title: "Pending Pickups",
               url: "/dashboard/assign-deliveries",
               icon: Truck,
             },
@@ -112,7 +112,7 @@ export function AppSidebar(props) {
               icon: Bike,
             },
             {
-              title: "Users Management",
+              title: "Manage Users",
               url: "/dashboard/users-management",
               icon: Users,
             },

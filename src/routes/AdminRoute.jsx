@@ -15,7 +15,7 @@ function AdminRoute({ children }) {
   }
 
   if (role !== "admin") {
-    return <div>Access is forbidden</div>;
+    return <div className="p-8 text-center text-slate-600">This page is available to Zap Shift administrators only.</div>;
   }
   return children;
 }

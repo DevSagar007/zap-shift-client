@@ -44,8 +44,8 @@ const ParcelTrack = () => {
     {
       status: "driver_assigned",
       matchingStatuses: ["driver_assigned", "diver_assigned", "rider_assigned", "rider-assigned"],
-      title: "Driver Assigned",
-      description: "A driver has been assigned to your parcel.",
+      title: "Rider Assigned",
+      description: "An approved rider has been assigned to your parcel.",
     },
     {
       status: "picked_up",
@@ -124,7 +124,7 @@ const ParcelTrack = () => {
           </h2>
 
           <p className="mt-2 text-gray-500">
-            Track your package delivery status
+            Follow your parcel from booking to doorstep delivery
           </p>
         </div>
 

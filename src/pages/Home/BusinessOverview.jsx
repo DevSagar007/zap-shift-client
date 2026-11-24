@@ -15,8 +15,8 @@ const makeIllustration = (content) =>
 const businessSteps = [
   {
     step: "01",
-    title: "Plan & Strategize",
-    desc: "Create a clear strategy and set goals for your business.",
+    title: "Book a Parcel",
+    desc: "Add parcel details, sender information, and receiver information in a few easy steps.",
     image: makeIllustration(
       '<rect x="28" y="28" width="64" height="72" rx="10" fill="#FFFFFF" stroke="#063D42" stroke-width="5"/><path d="M46 28v-7h28v7" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><path d="M44 52h32M44 66h32M44 80h20" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><circle cx="88" cy="88" r="14" fill="#D7F75D"/><path d="m82 88 4 4 8-9" stroke="#063D42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
     ),
@@ -24,8 +24,8 @@ const businessSteps = [
   },
   {
     step: "02",
-    title: "Build & Develop",
-    desc: "Turn your ideas into practical and effective solutions.",
+    title: "Pay Securely",
+    desc: "Complete your delivery payment through secure Stripe Checkout in BDT.",
     image: makeIllustration(
       '<rect x="24" y="30" width="72" height="48" rx="8" fill="#FFFFFF" stroke="#063D42" stroke-width="5"/><path d="M18 88h84" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><path d="m52 46-10 8 10 8M68 46l10 8-10 8" stroke="#063D42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="92" cy="30" r="10" fill="#D7F75D"/>'
     ),
@@ -33,8 +33,8 @@ const businessSteps = [
   },
   {
     step: "03",
-    title: "Grow & Succeed",
-    desc: "Improve performance and achieve sustainable growth.",
+    title: "Track & Deliver",
+    desc: "Riders pick up and deliver the parcel while you follow its progress online.",
     image: makeIllustration(
       '<path d="M28 86V66M50 86V50M72 86V58M94 86V34" stroke="#063D42" stroke-width="8" stroke-linecap="round"/><path d="M24 92h76" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><path d="m28 48 20-16 18 10 28-24" stroke="#D7F75D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M82 18h12v12" stroke="#D7F75D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'
     ),

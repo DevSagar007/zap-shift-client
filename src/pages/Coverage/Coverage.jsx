@@ -56,7 +56,7 @@ const Coverage = () => {
             max-sm:text-[23px]
           "
         >
-          We are available in 64 districts
+          Find a Zap Shift service center near you
         </h2>
 
         {/* =========================================
@@ -85,7 +85,7 @@ const Coverage = () => {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search here"
+              placeholder="Search by district"
               className="
                 h-full
                 w-full
@@ -148,7 +148,7 @@ const Coverage = () => {
             max-sm:text-[15px]
           "
         >
-          We deliver almost all over Bangladesh
+          Our service centers cover all 64 districts of Bangladesh
         </h3>
 
         {/* =========================================
@@ -181,8 +181,8 @@ const Coverage = () => {
             {serviceCenters.map((center) => (
               <Marker position={[center.latitude, center?.longitude]}>
                 <Popup>
-                  {`We deliver almost all over ${center.district}`} <br />
-                  <span> Service Area: {center.covered_area.join(",")}</span>
+                  {`Zap Shift service center: ${center.district}`} <br />
+                  <span>Covered areas: {center.covered_area.join(", ")}</span>
                 </Popup>
               </Marker>
             ))}
