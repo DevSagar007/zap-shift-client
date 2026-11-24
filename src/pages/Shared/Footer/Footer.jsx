@@ -35,12 +35,12 @@ const menus = [
 
 const Footer = () => {
   return (
-    <footer className="bg-[#1f1f1f] py-16 text-slate-300">
+    <footer className="bg-[#052E33] py-16 text-slate-300">
       <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2">
-              <Logo />
+              <Logo className="brightness-0 invert" />
             </div>
             <p className="mt-4 max-w-sm text-sm leading-6 text-slate-400">
               Zap Shift makes local parcel delivery fast, simple, and
@@ -72,7 +72,7 @@ const Footer = () => {
                   <li key={item.label}>
                     <Link
                       to={item.href}
-                      className="text-sm text-slate-400 transition-colors hover:text-lime-300"
+                      className="text-sm font-medium text-slate-200 transition-colors hover:text-lime-200"
                     >
                       {item.label}
                     </Link>
@@ -83,8 +83,8 @@ const Footer = () => {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="text-sm text-slate-400">
+        <div className="mt-12 flex items-center justify-center gap-4 border-t border-lime-300/15 pt-6">
+          <p className="text-sm text-slate-400 text-center">
             © {new Date().getFullYear()} Zap Shift. All rights reserved.
           </p>
         </div>
