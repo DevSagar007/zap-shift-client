@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Loader2 } from "lucide-react";
 
 function Register() {
   // call useAuth
@@ -27,6 +28,7 @@ function Register() {
     email: "",
     password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // handle Change
   const handleChange = (e) => {
@@ -39,6 +41,7 @@ function Register() {
   // handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const result = await registerUser(
@@ -61,6 +64,8 @@ function Register() {
       navigate(redirectPath, { replace: true });
     } catch (error) {
       console.error("Registration failed:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -139,9 +144,11 @@ function Register() {
                   {/* Login Button */}
                   <Button
                     type="submit"
+                  disabled={isSubmitting}
                     className="h-10 w-full bg-lime-300 font-semibold text-slate-900 hover:bg-lime-400"
                   >
-                    Register
+                  {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+                  {isSubmitting ? "Creating account..." : "Register"}
                   </Button>
                 </form>
 
