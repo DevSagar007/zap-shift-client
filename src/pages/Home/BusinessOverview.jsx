@@ -1,79 +1,95 @@
 import {
   ArrowUpRight,
-  MapPinned,
-  PackageCheck,
-  Truck,
+  Boxes,
+  BriefcaseBusiness,
+  Globe2,
+  ShieldCheck,
 } from "lucide-react";
 import { Link } from "react-router";
 
-const trackingSteps = [
+const makeIllustration = (content) =>
+  `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">${content}</svg>`
+  )}`;
+
+const businessSteps = [
   {
-    title: "Pickup confirmed",
-    desc: "We collect your parcel and attach a live tracking ID.",
-    image: "/assets/tracking/transit-warehouse.png",
-    icon: PackageCheck,
+    step: "01",
+    title: "Plan & Strategize",
+    desc: "Create a clear strategy and set goals for your business.",
+    image: makeIllustration(
+      '<rect x="28" y="28" width="64" height="72" rx="10" fill="#FFFFFF" stroke="#063D42" stroke-width="5"/><path d="M46 28v-7h28v7" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><path d="M44 52h32M44 66h32M44 80h20" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><circle cx="88" cy="88" r="14" fill="#D7F75D"/><path d="m82 88 4 4 8-9" stroke="#063D42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+    ),
+    icon: BriefcaseBusiness,
   },
   {
-    title: "On the move",
-    desc: "Follow every scan as your parcel moves through our hubs.",
-    image: "/assets/tracking/02.png",
-    icon: Truck,
+    step: "02",
+    title: "Build & Develop",
+    desc: "Turn your ideas into practical and effective solutions.",
+    image: makeIllustration(
+      '<rect x="24" y="30" width="72" height="48" rx="8" fill="#FFFFFF" stroke="#063D42" stroke-width="5"/><path d="M18 88h84" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><path d="m52 46-10 8 10 8M68 46l10 8-10 8" stroke="#063D42" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="92" cy="30" r="10" fill="#D7F75D"/>'
+    ),
+    icon: Boxes,
   },
   {
-    title: "Out for delivery",
-    desc: "Get the final update when your rider is near the doorstep.",
-    image: "/assets/tracking/03.png",
-    icon: MapPinned,
+    step: "03",
+    title: "Grow & Succeed",
+    desc: "Improve performance and achieve sustainable growth.",
+    image: makeIllustration(
+      '<path d="M28 86V66M50 86V50M72 86V58M94 86V34" stroke="#063D42" stroke-width="8" stroke-linecap="round"/><path d="M24 92h76" stroke="#063D42" stroke-width="5" stroke-linecap="round"/><path d="m28 48 20-16 18 10 28-24" stroke="#D7F75D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M82 18h12v12" stroke="#D7F75D" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'
+    ),
+    icon: Globe2,
   },
 ];
 
-export default function Tracking() {
+export default function BusinessOverview() {
   return (
-    <section id="tracking" className="scroll-mt-24 bg-white py-20">
+    <section id="business-overview" className="scroll-mt-24 bg-white py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-lime-300/40 bg-lime-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#0B3F45]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-lime-300/40 bg-lime-300/10 px-4 py-2 text-xs font-semibold capitalize text-[#0B3F45]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#0B3F45]" />
-            Live parcel tracking
+            SMART BUSINESS SOLUTIONS
           </span>
 
           <h2 className="mt-6 text-[42px] font-bold leading-tight text-[#0B3F45]">
-            Know where your parcel is, every step of the way.
+            Build a stronger digital presence for your business.
           </h2>
 
           <p className="mt-5 max-w-xl text-[17px] leading-8 text-[#646A73]">
-            Follow your parcel from pickup to doorstep with clear status
-            updates, hub scans, and delivery progress in one simple tracking
-            view.
+            Discover innovative solutions designed to simplify your workflow,
+            improve productivity, and help your business grow.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-[#E6EAEB] p-5">
-              <PackageCheck className="h-6 w-6 text-[#0B3F45]" />
+              <BriefcaseBusiness className="h-6 w-6 text-[#0B3F45]" />
               <p className="mt-3 font-semibold text-[#0B3F45]">
-                One tracking ID
+                Smart Solutions
               </p>
               <p className="mt-1 text-sm leading-6 text-[#646A73]">
-                Use the ID from your order to see the latest update anytime.
+                Powerful tools and modern solutions to support your business
+                goals.
               </p>
             </div>
 
             <div className="rounded-2xl border border-[#E6EAEB] p-5">
-              <MapPinned className="h-6 w-6 text-[#0B3F45]" />
+              <ShieldCheck className="h-6 w-6 text-[#0B3F45]" />
               <p className="mt-3 font-semibold text-[#0B3F45]">
-                Nationwide updates
+                Reliable Support
               </p>
               <p className="mt-1 text-sm leading-6 text-[#646A73]">
-                Track local and nationwide parcels across every Zap Shift hub.
+                Get the guidance and support you need to move your business
+                forward.
               </p>
             </div>
           </div>
 
           <Link
-            to="/dashboard/tracking"
+            to="/#services"
             className="mt-9 inline-flex h-12 items-center gap-2 rounded-xl bg-[#063D42] px-6 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#052E33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#063D42]/40 focus-visible:ring-offset-2"
           >
-            Track a Parcel
+            Explore Our Services
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -82,24 +98,26 @@ export default function Tracking() {
           <div className="rounded-[28px] bg-[#063D42] p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-lime-200/80">
-                  Live delivery
+                <p className="text-xs font-medium capitalize text-lime-200/80">
+                  BUSINESS OVERVIEW
                 </p>
-                <p className="mt-2 text-xl font-semibold">Parcel in transit</p>
+                <p className="mt-2 text-xl font-semibold">
+                  Everything you need to grow
+                </p>
               </div>
               <span className="inline-flex items-center gap-2 rounded-full bg-lime-300/15 px-3 py-1.5 text-xs font-semibold text-lime-200">
                 <span className="h-1.5 w-1.5 rounded-full bg-lime-300" />
-                Live
+                Active
               </span>
             </div>
 
             <div className="mt-6 h-1.5 w-full overflow-hidden rounded-full bg-white/15">
-              <div className="h-full w-2/3 rounded-full bg-lime-300" />
+              <div className="h-full w-3/4 rounded-full bg-lime-300" />
             </div>
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {trackingSteps.map((step, index) => {
+            {businessSteps.map((step) => {
               const Icon = step.icon;
 
               return (
@@ -118,8 +136,8 @@ export default function Tracking() {
                     </span>
                   </div>
 
-                  <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-[#8A9099]">
-                    Step {String(index + 1).padStart(2, "0")}
+                  <p className="mt-4 text-xs font-semibold capitalize text-[#8A9099]">
+                    {step.step}
                   </p>
                   <h3 className="mt-2 text-lg font-bold text-[#0B3F45]">
                     {step.title}
@@ -134,11 +152,11 @@ export default function Tracking() {
 
           <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8A9099]">
-                Latest update
+              <p className="text-xs font-semibold capitalize text-[#8A9099]">
+                LATEST UPDATE
               </p>
               <p className="mt-1 text-sm font-bold text-[#0B3F45]">
-                Parcel reached Dhaka hub
+                Your business is moving forward
               </p>
             </div>
             <span className="rounded-full bg-[#EEF0FF] px-3 py-1.5 text-xs font-semibold text-[#0B3F45]">

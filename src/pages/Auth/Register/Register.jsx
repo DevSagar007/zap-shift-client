@@ -83,7 +83,7 @@ function Register() {
               {/* Login Form */}
               <div className="mt-20 max-w-md sm:mt-24 lg:mt-28 lg:pl-8">
                 <div>
-                  <h1 className="text-4xl font-black tracking-tight sm:text-5xl">
+                  <h1 className="text-4xl font-black sm:text-5xl">
                     Create an Account
                   </h1>
 

@@ -1,7 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
+import { TablePagination } from "@/components/ui/table-pagination";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 import {
   Table,
   TableBody,
@@ -16,23 +23,34 @@ import Swal from "sweetalert2";
 const AssignDeliveries = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { page, setPage, limit } = useServerPagination();
 
-  const {
-    isPending,
-    isFetching,
-    error,
-    data: parcels = [],
-    refetch,
-  } = useQuery({
-    queryKey: ["parcels", user?.email, "assignDeliveries"],
+  useEffect(() => {
+    setPage(1);
+  }, [user?.email, setPage]);
+
+  const { isPending, isFetching, error, data, refetch } = useQuery({
+    queryKey: ["parcels", user?.email, "assignDeliveries", page, limit],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/parcels/riders?riderEmail=${user.email}&deliveryStatus=diver_assigned`,
+        paginatedUrl(
+          "/parcels/riders",
+          { riderEmail: user.email, deliveryStatus: "diver_assigned" },
+          { page, limit },
+        ),
       );
 
-      return res.data;
+      return paginatedResult(res, { page, limit });
     },
   });
+
+  const parcels = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
 
   const handleAcceptedDelivery = (parcel, status) => {
     const statusInfo = {
@@ -62,12 +80,10 @@ const AssignDeliveries = () => {
 
   if (error) return "An error has occurred: " + error.message;
 
-  console.log("parcels", parcels);
-
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-5">
-        Parcels pending pickup: {parcels.length}
+      <h2 className="mb-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        Pending Pickups
       </h2>
       <div className="rounded-xl border overflow-hidden">
         <Table>
@@ -97,7 +113,7 @@ const AssignDeliveries = () => {
                 <TableRow key={parcel._id}>
                   <TableCell>
                     <p className="font-medium">{parcel.parcelName}</p>
-                    <p className="text-sm text-muted-foreground capitalize">
+                    <p className="text-sm text-muted-foreground capitalize ">
                       {parcel.parcelType} · {parcel.parcelWeight} kg
                     </p>
                   </TableCell>
@@ -122,7 +138,7 @@ const AssignDeliveries = () => {
                   </TableCell>
 
                   <TableCell>
-                    <span className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-medium capitalize text-sky-700">
+                    <span className="inline-flex rounded-full bg-sky-100 px-3 py-1 text-xs font-medium capitalize  text-sky-700">
                       {parcel.deliveryStatus?.replaceAll("-", " ") || "N/A"}
                     </span>
                   </TableCell>
@@ -193,6 +209,13 @@ const AssignDeliveries = () => {
             )}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

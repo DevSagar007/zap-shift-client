@@ -1,15 +1,17 @@
 import Banner from "./Banner";
 import HowItWorks from "./HowItWorks";
 import Services from "./Services";
-import Tracking from "./Tracking";
+import BusinessOverview from "./BusinessOverview";
+import FAQSection from "./FAQSection";
 
 export default function Home() {
   return (
     <>
       <Banner />
-      <Tracking />
+      <BusinessOverview />
       <HowItWorks />
       <Services />
+      <FAQSection />
     </>
   );
 }

@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ListSkeleton,
   TableRowsSkeleton,
 } from "@/components/ui/dashboard-skeletons";
+import { TablePagination } from "@/components/ui/table-pagination";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 import {
   Table,
   TableBody,
@@ -29,31 +35,57 @@ import Swal from "sweetalert2";
 const AssignRIders = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedParcel, setSelectedParcel] = useState(null);
-  console.log("selectedParcel", selectedParcel);
-
+  const { page, setPage, limit } = useServerPagination();
   const {
-    refetch,
-    data: parcels = [],
-    isLoading,
-    isFetching,
-  } = useQuery({
-    queryKey: ["parcels", "pending-pickup"],
+    page: riderPage,
+    setPage: setRiderPage,
+    limit: riderLimit,
+  } = useServerPagination();
+
+  useEffect(() => {
+    setPage(1);
+  }, [setPage]);
+
+  useEffect(() => {
+    setRiderPage(1);
+  }, [selectedParcel?._id, setRiderPage]);
+
+  const { refetch, data, isLoading, isFetching } = useQuery({
+    queryKey: ["parcels", "pending-pickup", page, limit],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        "/parcels?deliveryStatus=pending-pickup",
+        paginatedUrl(
+          "/parcels",
+          { deliveryStatus: "pending-pickup" },
+          { page, limit },
+        ),
       );
-      return res.data;
+      return paginatedResult(res, { page, limit });
     },
   });
 
+  const parcels = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
+
   // find riders
   const {
-    data: riders = [],
+    data: ridersData,
     refetch: refetchRiders,
     isLoading: isRidersLoading,
     isFetching: isRidersFetching,
   } = useQuery({
-    queryKey: ["riders", "available", selectedParcel?.receiverDistrict],
+    queryKey: [
+      "riders",
+      "available",
+      selectedParcel?.receiverDistrict,
+      riderPage,
+      riderLimit,
+    ],
     queryFn: async () => {
       const params = {};
 
@@ -64,11 +96,24 @@ const AssignRIders = () => {
         params.district = selectedParcel.receiverDistrict;
       }
 
-      const res = await axiosSecure.get("/riders", { params });
-      return res.data;
+      const res = await axiosSecure.get(
+        paginatedUrl("/riders", params, {
+          page: riderPage,
+          limit: riderLimit,
+        }),
+      );
+      return paginatedResult(res, { page: riderPage, limit: riderLimit });
     },
     enabled: !!selectedParcel,
   });
+
+  const riders = ridersData?.items ?? [];
+  const riderMeta = ridersData?.meta ?? {
+    total: 0,
+    page: riderPage,
+    limit: riderLimit,
+    totalPages: 1,
+  };
 
   // handle assign rider
   const handleAssign = (rider) => {
@@ -100,8 +145,8 @@ const AssignRIders = () => {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-5">
-        Assign Riders {parcels.length}
+      <h2 className="mb-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        Assign Riders
       </h2>
       <div className="rounded-xl border overflow-hidden">
         <Table>
@@ -137,7 +182,7 @@ const AssignRIders = () => {
                     <div className="space-y-1">
                       <p className="font-medium">{parcel.parcelName}</p>
 
-                      <p className="text-sm text-muted-foreground capitalize">
+                      <p className="text-sm text-muted-foreground capitalize ">
                         {parcel.parcelType}
                       </p>
 
@@ -173,7 +218,7 @@ const AssignRIders = () => {
 
                   {/* Delivery Status */}
                   <TableCell>
-                    <span className="inline-flex rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium capitalize text-yellow-700">
+                    <span className="inline-flex rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium capitalize  text-yellow-700">
                       {parcel.deliveryStatus?.replaceAll("-", " ") || "N/A"}
                     </span>
                   </TableCell>
@@ -181,7 +226,7 @@ const AssignRIders = () => {
                   {/* Payment Status */}
                   <TableCell>
                     <div className="space-y-1">
-                      <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-medium capitalize text-green-700">
+                      <span className="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-medium capitalize  text-green-700">
                         {parcel.paymentStatus || "N/A"}
                       </span>
 
@@ -220,6 +265,13 @@ const AssignRIders = () => {
             )}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
 
       <Dialog
@@ -290,6 +342,13 @@ const AssignRIders = () => {
               ))
             )}
           </div>
+
+          <TablePagination
+            page={riderMeta.page}
+            totalPages={riderMeta.totalPages}
+            total={riderMeta.total}
+            onPageChange={setRiderPage}
+          />
 
           <DialogFooter>
             <DialogClose render={<Button variant="outline" />}>

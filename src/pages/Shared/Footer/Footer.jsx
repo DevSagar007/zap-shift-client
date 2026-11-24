@@ -42,21 +42,21 @@ const Footer = () => {
             <div className="flex items-center gap-2">
               <Logo className="brightness-0 invert" />
             </div>
-            <p className="mt-4 max-w-sm text-sm leading-6 text-slate-400">
+            <p className="mt-4 max-w-sm text-sm leading-6 text-white/80">
               Zap Shift makes local parcel delivery fast, simple, and
               trackable. Send a parcel or join our rider network today.
             </p>
             <div className="mt-6 flex items-center gap-3">
-              <a href="#" aria-label="Website" className="text-slate-400 transition-colors hover:text-lime-300">
+              <a href="#" aria-label="Website" className="text-white/80 transition-colors hover:text-lime-300">
                 <Globe className="h-5 w-5" />
               </a>
-              <a href="#" aria-label="Updates" className="text-slate-400 transition-colors hover:text-lime-300">
+              <a href="#" aria-label="Updates" className="text-white/80 transition-colors hover:text-lime-300">
                 <Send className="h-5 w-5" />
               </a>
-              <a href="#" aria-label="Contact" className="text-slate-400 transition-colors hover:text-lime-300">
+              <a href="#" aria-label="Contact" className="text-white/80 transition-colors hover:text-lime-300">
                 <Mail className="h-5 w-5" />
               </a>
-              <a href="#" aria-label="Share" className="text-slate-400 transition-colors hover:text-lime-300">
+              <a href="#" aria-label="Share" className="text-white/80 transition-colors hover:text-lime-300">
                 <Share2 className="h-5 w-5" />
               </a>
             </div>
@@ -84,7 +84,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 flex items-center justify-center gap-4 border-t border-lime-300/15 pt-6">
-          <p className="text-sm text-slate-400 text-center">
+          <p className="text-sm text-white/80 text-center">
             © {new Date().getFullYear()} Zap Shift. All rights reserved.
           </p>
         </div>

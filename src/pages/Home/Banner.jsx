@@ -29,12 +29,12 @@ export default function Banner() {
 
       <div className="relative mx-auto flex min-h-[560px] max-w-7xl items-center px-5 py-20 sm:px-8 lg:min-h-[660px] lg:px-10 lg:py-24">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-lime-300/25 bg-lime-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-lime-200">
+          <div className="inline-flex items-center gap-2 rounded-full border border-lime-300/25 bg-lime-300/10 px-4 py-2 text-xs font-semibold capitalize text-lime-200">
             <span className="h-1.5 w-1.5 rounded-full bg-lime-300" />
             Faster parcel delivery
           </div>
 
-          <h1 className="mt-7 font-heading text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mt-7 font-heading text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
             Send anywhere.
             <br />
             <span className="text-lime-300">Track every step.</span>
@@ -56,7 +56,7 @@ export default function Banner() {
             </Link>
             <Link
               to="/dashboard/tracking"
-              className="inline-flex h-12 items-center gap-2 rounded-xl border border-white/20 px-6 text-sm font-semibold text-white transition-colors duration-200 hover:border-lime-300/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#052E33]"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-lime-300 px-6 text-sm font-semibold text-[#052E33] transition-colors duration-200 hover:bg-lime-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#052E33]"
             >
               Track Parcel
               <MapPinned className="h-4 w-4" />
@@ -75,7 +75,7 @@ export default function Banner() {
 
         <div className="ml-auto hidden w-72 rounded-2xl border border-white/15 bg-[#052E33]/70 p-5 backdrop-blur-sm xl:block">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-300">
+            <span className="text-xs font-medium capitalize text-slate-300">
               Live delivery
             </span>
             <PackageCheck className="h-5 w-5 text-lime-300" strokeWidth={1.8} />

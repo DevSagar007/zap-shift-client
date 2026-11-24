@@ -10,34 +10,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TablePagination } from "@/components/ui/table-pagination";
 import Swal from "sweetalert2";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 
 function UsersManagement() {
   // state
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const { page, setPage, limit } = useServerPagination();
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, setPage]);
 
   // fetch data tanstack
-  const {
-    refetch,
-    data: users = [],
-    isLoading,
-    isFetching,
-    isError,
-  } = useQuery({
-    queryKey: ["users", searchTerm],
+  const { refetch, data, isLoading, isFetching, isError } = useQuery({
+    queryKey: ["users", searchTerm, page, limit],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users", {
-        params: {
-          searchTerm: searchTerm,
-        },
-      });
-      return res.data;
+      const res = await axiosSecure.get(
+        paginatedUrl("/users", { searchTerm }, { page, limit }),
+      );
+
+      return paginatedResult(res, { page, limit });
     },
   });
+
+  const items = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
 
   if (isLoading || isFetching) {
     return <DashboardSkeleton />;
@@ -54,7 +66,6 @@ function UsersManagement() {
 
   // handle make admin
   const handleMakeAdmin = (user) => {
-    console.log("Make user:", user);
     const roleInfo = { role: "admin" };
     axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
       if (res.data.modifiedCount) {
@@ -68,23 +79,18 @@ function UsersManagement() {
     });
   };
 
-  const handleRemoveAdmin = (user) => {
-    console.log("Make rider:", user);
-  };
+  const handleRemoveAdmin = () => {};
 
   // handle delete
-  const handleDelete = (user) => {
-    console.log("Delete:", user);
-  };
+  const handleDelete = () => {};
 
   return (
     <div>
       {/* Header */}
       <div className="mb-5 flex items-center justify-between gap-4">
-        <div className="text-4xl font-extrabold">
-          Users Management{" "}
-          <span className="text-muted-foreground">({users.length})</span>
-        </div>
+        <h2 className="font-heading text-2xl font-bold text-foreground sm:text-3xl">
+          User Management
+        </h2>
 
         {/* Search */}
         <form onSubmit={handleSearch} className="flex w-full max-w-sm gap-2">
@@ -121,7 +127,7 @@ function UsersManagement() {
           </TableHeader>
 
           <TableBody>
-            {users.length === 0 ? (
+            {items.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={5}
@@ -131,7 +137,7 @@ function UsersManagement() {
                 </TableCell>
               </TableRow>
             ) : (
-              users.map((user) => (
+              items.map((user) => (
                 <TableRow key={user._id}>
                   {/* User */}
                   <TableCell>
@@ -214,6 +220,13 @@ function UsersManagement() {
             )}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

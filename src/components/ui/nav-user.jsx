@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  BadgeCheck,
   CreditCard,
   LogOut,
   ChevronsUpDown,
@@ -82,10 +81,6 @@ export function NavUser({ user }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => navigate("/dashboard")}>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => navigate("/dashboard/payment-history")}
               >

@@ -1,6 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
+import { TablePagination } from "@/components/ui/table-pagination";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 import {
   Table,
   TableBody,
@@ -14,28 +21,33 @@ import Swal from "sweetalert2";
 
 function ApproveRiders() {
   const axiosSecure = useAxiosSecure();
+  const { page, setPage, limit } = useServerPagination();
 
-  const {
-    isPending,
-    isFetching,
-    error,
-    refetch,
-    data: riders = [],
-  } = useQuery({
-    queryKey: ["riders", "pending"],
+  useEffect(() => {
+    setPage(1);
+  }, [setPage]);
+
+  const { isPending, isFetching, error, refetch, data } = useQuery({
+    queryKey: ["riders", "pending", page, limit],
     queryFn: async () => {
-      const res = await axiosSecure.get("/riders");
-      return res.data;
+      const res = await axiosSecure.get(paginatedUrl("/riders", {}, { page, limit }));
+      return paginatedResult(res, { page, limit });
     },
   });
+
+  const riders = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
 
   if (isPending || isFetching) return <DashboardSkeleton />;
 
   if (error) return "An error has occurred: " + error.message;
 
-  const handleDelete = (rider) => {
-    console.log("delete rider", rider);
-  };
+  const handleDelete = () => {};
 
   // handle approved
   const handleApprove = (rider) => {
@@ -43,17 +55,12 @@ function ApproveRiders() {
   };
 
   // handle rejected
-  const handleReject = (rider) => {
-    console.log("reject rider", rider);
-  };
+  const handleReject = () => {};
 
   const updateRiderStatus = (rider, status) => {
-    console.log("approve status", rider);
     const updateInfo = { status: "approved", email:rider.email};
 
     axiosSecure.patch(`/riders/${rider._id}`, updateInfo).then((res) => {
-      console.log("PATCH response:", res.data);
-
       if (res.data.modifiedCount) {
         refetch();
         Swal.fire({
@@ -67,8 +74,8 @@ function ApproveRiders() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-5">
-        Approve Riders : {riders.length}
+      <h2 className="mb-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        Rider Approvals
       </h2>
 
       <div className="rounded-xl border overflow-hidden">
@@ -184,6 +191,13 @@ function ApproveRiders() {
             ))}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

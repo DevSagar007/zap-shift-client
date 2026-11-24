@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../../../hooks/useAuth";
-import { Link, User } from "lucide-react";
+import { useEffect } from "react";
+import { Link } from "react-router";
 import {
   Table,
   TableBody,
@@ -10,25 +10,55 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TableRowsSkeleton } from "@/components/ui/dashboard-skeletons";
+import { TablePagination } from "@/components/ui/table-pagination";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 import Swal from "sweetalert2";
 
 function PaymentHistory() {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { page, setPage, limit } = useServerPagination();
 
-  const { data: payments = [], refetch } = useQuery({
-    queryKey: ["payments", User.email],
+  useEffect(() => {
+    setPage(1);
+  }, [user?.email, setPage]);
+
+  const {
+    data,
+    isPending,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["payments", user?.email, page, limit],
+    enabled: Boolean(user?.email),
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payments?email=${user.email}`);
-      return res.data;
+      const res = await axiosSecure.get(
+        paginatedUrl("/payments", { email: user.email }, { page, limit }),
+      );
+
+      return paginatedResult(res, { page, limit });
     },
   });
 
-  console.log("payments", payments);
-  // handleDelete
+  const payments = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
+  const isLoading = isPending || isFetching;
+
   const handleDelete = (id) => {
-    console.log("click id", id);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -40,9 +70,7 @@ function PaymentHistory() {
     }).then((result) => {
       if (result.isConfirmed)
         axiosSecure.delete(`/parcels/${id}`).then((res) => {
-          console.log(res.data);
           if (res.data.deletedCount) {
-            // refech the ui
             refetch();
             Swal.fire({
               title: "Deleted!",
@@ -53,11 +81,12 @@ function PaymentHistory() {
         });
     });
   };
+
   return (
     <div>
-      <div className="text-4xl font-semibold mb-5">
-        Payment History {payments.length}
-      </div>
+      <h2 className="mb-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        Payment History
+      </h2>
       <div className="rounded-xl border overflow-hidden">
         <Table>
           <TableHeader>
@@ -72,81 +101,101 @@ function PaymentHistory() {
           </TableHeader>
 
           <TableBody>
-            {payments.map((parcel) => (
-              <TableRow key={parcel._id}>
-                {/* Parcel Info */}
-                <TableCell>
-                  <p className="font-medium">{parcel.parcelName}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {parcel.parcelType}
-                  </p>
-                </TableCell>
-
-                {/* Receiver Info */}
-                <TableCell>
-                  <div className="space-y-1">
-                    <p className="font-medium">{parcel.receiverName}</p>
-
-                    <p className="text-sm text-muted-foreground">
-                      {parcel.receiverAddress}
-                    </p>
-
-                    <p className="text-sm text-muted-foreground">
-                      {parcel.receiverDistrict}, {parcel.receiverRegion}
-                    </p>
-
-                    <p className="text-sm">{parcel.receiverContact}</p>
-                  </div>
-                </TableCell>
-
-                {/* Tracking */}
-                <TableCell>
-                  <span className="font-medium">
-                    {parcel.trackingId || "N/A"}
-                  </span>
-                </TableCell>
-
-                {/* Time */}
-                <TableCell>
-                  <span className="font-medium">{parcel.paidAt || "N/A"}</span>
-                </TableCell>
-
-                {/* Payment */}
-                <TableCell>
-                  {parcel.paymentStatus === "paid" ? (
-                    <span>৳ {parcel.amount} (Paid)</span>
-                  ) : (
-                    <Link to={`/dashboard/payment/${parcel._id}`}>
-                      <Button size="sm" variant="destructive">
-                        Pay now
-                      </Button>
-                    </Link>
-                  )}
-                </TableCell>
-
-                {/* Action */}
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      className="bg-sky-100 text-black hover:bg-sky-200"
-                    >
-                      View
-                    </Button>
-
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(parcel._id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
+            {isLoading ? (
+              <TableRowsSkeleton rows={limit} columns={6} />
+            ) : isError ? (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="h-24 text-center text-destructive"
+                >
+                  {error?.message || "Failed to load payment history."}
                 </TableCell>
               </TableRow>
-            ))}
+            ) : payments.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={6}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  No payment history found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              payments.map((parcel) => (
+                <TableRow key={parcel._id}>
+                  <TableCell>
+                    <p className="font-medium">{parcel.parcelName}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {parcel.parcelType || "N/A"}
+                    </p>
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="font-medium">{parcel.receiverName}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {parcel.receiverAddress}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {parcel.receiverDistrict}, {parcel.receiverRegion}
+                      </p>
+                      <p className="text-sm">{parcel.receiverContact}</p>
+                    </div>
+                  </TableCell>
+
+                  <TableCell>
+                    <span className="font-medium">
+                      {parcel.trackingId || "N/A"}
+                    </span>
+                  </TableCell>
+
+                  <TableCell>
+                    <span className="font-medium">{parcel.paidAt || "N/A"}</span>
+                  </TableCell>
+
+                  <TableCell>
+                    {parcel.paymentStatus === "paid" ? (
+                      <span>৳ {parcel.amount} (Paid)</span>
+                    ) : (
+                      <Link to={`/dashboard/payment/${parcel._id}`}>
+                        <Button size="sm" variant="destructive">
+                          Pay now
+                        </Button>
+                      </Link>
+                    )}
+                  </TableCell>
+
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="bg-sky-100 text-black hover:bg-sky-200"
+                      >
+                        View
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleDelete(parcel._id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

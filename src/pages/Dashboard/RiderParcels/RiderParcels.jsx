@@ -10,24 +10,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TablePagination } from "@/components/ui/table-pagination";
+import { useEffect } from "react";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 
 function RiderParcels() {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { page, setPage, limit } = useServerPagination();
 
-  const {
-    isPending,
-    isFetching,
-    error,
-    data: parcels = [],
-  } = useQuery({
-    queryKey: ["riderParcels", user?.email],
+  useEffect(() => {
+    setPage(1);
+  }, [user?.email, setPage]);
+
+  const { isPending, isFetching, error, data } = useQuery({
+    queryKey: ["riderParcels", user?.email, page, limit],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/parcels?riderEmail=${user.email}`);
-      return res.data;
+      const res = await axiosSecure.get(
+        paginatedUrl("/parcels", { riderEmail: user.email }, { page, limit }),
+      );
+
+      return paginatedResult(res, { page, limit });
     },
   });
+
+  const items = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
 
   if (isPending || isFetching) return <DashboardSkeleton />;
 
@@ -35,8 +53,8 @@ function RiderParcels() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-5">
-        Assigned Parcels : {parcels.length}
+      <h2 className="mb-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        Assigned Parcels
       </h2>
       <div className="rounded-xl border overflow-hidden">
         <Table>
@@ -52,7 +70,7 @@ function RiderParcels() {
           </TableHeader>
 
           <TableBody>
-            {parcels.length === 0 ? (
+            {items.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={6}
@@ -62,11 +80,11 @@ function RiderParcels() {
                 </TableCell>
               </TableRow>
             ) : (
-              parcels.map((parcel) => (
+              items.map((parcel) => (
                 <TableRow key={parcel._id}>
                   <TableCell>
                     <p className="font-medium">{parcel.parcelName}</p>
-                    <p className="text-sm text-muted-foreground capitalize">
+                    <p className="text-sm text-muted-foreground capitalize ">
                       {parcel.parcelType} · {parcel.parcelWeight} kg
                     </p>
                   </TableCell>
@@ -91,7 +109,7 @@ function RiderParcels() {
                   </TableCell>
 
                   <TableCell>
-                    <span className="font-medium capitalize">
+                    <span className="font-medium capitalize ">
                       {parcel.deliveryStatus?.replaceAll("-", " ") || "N/A"}
                     </span>
                   </TableCell>
@@ -119,6 +137,13 @@ function RiderParcels() {
             )}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

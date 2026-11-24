@@ -11,36 +11,51 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { TablePagination } from "@/components/ui/table-pagination";
 import Swal from "sweetalert2";
 import { Link } from "react-router";
+import { useEffect } from "react";
+import {
+  paginatedUrl,
+  paginatedResult,
+  useServerPagination,
+} from "../../../hooks/useServerPagination";
 
 function MyParcels() {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const { page, setPage, limit } = useServerPagination();
 
-  const {
-    isPending,
-    isFetching,
-    error,
-    data: parcels = [],
-    refetch,
-  } = useQuery({
-    queryKey: ["myParcels", user?.email],
+  useEffect(() => {
+    setPage(1);
+  }, [user?.email, setPage]);
+
+  const { isPending, isFetching, error, data, refetch } = useQuery({
+    queryKey: ["myParcels", user?.email, page, limit],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/parcels?email=${user.email}`);
-      return res.data;
+      const res = await axiosSecure.get(
+        paginatedUrl("/parcels", { email: user.email }, { page, limit }),
+      );
+
+      return paginatedResult(res, { page, limit });
     },
   });
+
+  const items = data?.items ?? [];
+  const meta = data?.meta ?? {
+    total: 0,
+    page,
+    limit,
+    totalPages: 1,
+  };
 
   if (isPending || isFetching) return <DashboardSkeleton />;
 
   if (error) return "An error has occurred: " + error.message;
-  console.log("parcels", parcels);
 
   // handleDelete
   const handleDelete = (id) => {
-    console.log("click id", id);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -52,7 +67,6 @@ function MyParcels() {
     }).then((result) => {
       if (result.isConfirmed)
         axiosSecure.delete(`/parcels/${id}`).then((res) => {
-          console.log(res.data);
           if (res.data.deletedCount) {
             // refech the ui
             refetch();
@@ -68,8 +82,8 @@ function MyParcels() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-5">
-        Manage Parcel : {parcels.length}
+      <h2 className="mb-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+        My Parcels
       </h2>
       <div className="rounded-xl border overflow-hidden">
         <Table>
@@ -85,7 +99,7 @@ function MyParcels() {
           </TableHeader>
 
           <TableBody>
-            {parcels.map((parcel) => (
+            {items.map((parcel) => (
               <TableRow key={parcel._id}>
                 {/* Parcel Info */}
                 <TableCell>
@@ -162,6 +176,13 @@ function MyParcels() {
             ))}
           </TableBody>
         </Table>
+
+        <TablePagination
+          page={meta.page}
+          totalPages={meta.totalPages}
+          total={meta.total}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

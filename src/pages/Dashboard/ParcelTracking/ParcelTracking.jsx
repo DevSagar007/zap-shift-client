@@ -38,7 +38,10 @@ export default function DashboardParcelTracking() {
               className="h-11 w-full rounded-lg border border-slate-200 px-4 text-sm outline-none transition focus:border-[#03373d]"
             />
           </div>
-          <Button type="submit" className="h-11 bg-lime-300 px-6 text-slate-950">
+          <Button
+            type="submit"
+            className="h-12 rounded-xl bg-lime-300 px-6 text-sm font-semibold text-[#052E33] transition-colors duration-200 hover:bg-lime-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
             Track Parcel
           </Button>
         </form>

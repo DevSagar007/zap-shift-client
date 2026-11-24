@@ -49,7 +49,6 @@ const Coverage = () => {
             text-[32px]
             font-bold
             leading-[1.2]
-            tracking-[-0.7px]
             text-[#003f45]
 
             max-lg:text-[28px]

@@ -87,7 +87,7 @@ function RiderRegister() {
     <main className="min-h-screen bg-white px-6 py-10 text-[#03373d] sm:px-10 lg:px-12">
       <section className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-black tracking-normal sm:text-5xl">
+          <h1 className="text-4xl font-black sm:text-5xl">
             Be a Rider
           </h1>
 
@@ -102,7 +102,7 @@ function RiderRegister() {
 
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,580px)_1fr] lg:gap-16">
           <section>
-            <h2 className="mb-5 text-2xl font-extrabold tracking-normal">
+            <h2 className="mb-5 text-2xl font-extrabold">
               Tell us about yourself
             </h2>
 

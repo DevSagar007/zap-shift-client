@@ -168,7 +168,7 @@ function SendParcel() {
   return (
     <main className="min-h-screen bg-white px-6 py-12 text-[#03373d] sm:px-10 lg:px-20">
       <section className="mx-auto max-w-7xl">
-        <h1 className="text-4xl font-black tracking-normal sm:text-5xl">
+        <h1 className="text-4xl font-black sm:text-5xl">
           Send A Parcel
         </h1>
 
@@ -177,7 +177,7 @@ function SendParcel() {
           className="mt-12"
           noValidate
         >
-          <h2 className="text-2xl font-extrabold tracking-normal">
+          <h2 className="text-2xl font-extrabold">
             Enter your parcel details
           </h2>
 
@@ -305,10 +305,6 @@ function SendParcel() {
                     type="tel"
                     {...register("senderPhone", {
                       required: "Sender phone number is required.",
-                      pattern: {
-                        value: /^01[3-9]\d{8}$/,
-                        message: "Enter a valid Bangladeshi phone number.",
-                      },
                     })}
                     placeholder="Sender Phone No"
                     required
@@ -450,10 +446,6 @@ function SendParcel() {
                     type="tel"
                     {...register("receiverContact", {
                       required: "Receiver phone number is required.",
-                      pattern: {
-                        value: /^01[3-9]\d{8}$/,
-                        message: "Enter a valid Bangladeshi phone number.",
-                      },
                     })}
                     placeholder="Receiver Contact No"
                     required
@@ -550,7 +542,7 @@ function SendParcel() {
 
           <Button
             type="submit"
-            className="mt-10 h-10 w-full bg-lime-300 px-8 font-semibold text-slate-950 hover:bg-lime-400 sm:w-auto"
+            className="mt-10 inline-flex h-12 w-full items-center justify-center rounded-xl bg-lime-300 px-6 text-sm font-semibold text-[#052E33] transition-colors duration-200 hover:bg-lime-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white sm:w-auto"
           >
             Proceed to Confirm Booking
           </Button>
