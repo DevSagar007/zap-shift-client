@@ -1,4 +1,4 @@
-import { ArrowUpRight, Globe, Mail, Send, Share2 } from "lucide-react";
+import { Globe, Mail, Send, Share2 } from "lucide-react";
 import { Link } from "react-router";
 import Logo from "@/components/Logo";
 
@@ -17,6 +17,7 @@ const menus = [
     items: [
       { label: "How it Works", href: "/#how-it-works" },
       { label: "Our Services", href: "/#services" },
+      { label: "Send Parcel", href: "/send-parcel" },
       { label: "Be a Rider", href: "/rider" },
       { label: "Dashboard", href: "/dashboard" },
     ],
@@ -86,12 +87,6 @@ const Footer = () => {
           <p className="text-sm text-slate-400">
             © {new Date().getFullYear()} Zap Shift. All rights reserved.
           </p>
-          <Link
-            to="/#how-it-works"
-            className="flex items-center gap-2 text-sm font-medium text-lime-300 hover:text-lime-400"
-          >
-            Learn more <ArrowUpRight className="h-4 w-4" />
-          </Link>
         </div>
       </div>
     </footer>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowUpRight, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ function Navbar() {
     { label: "Services", href: "/#services" },
     { label: "Coverage", href: "/coverage" },
     { label: "How it Works", href: "/#how-it-works" },
+    { label: "Send Parcel", href: "/send-parcel" },
     { label: "Track Parcel", href: "/dashboard/tracking" },
   ];
 
@@ -179,15 +180,6 @@ function Navbar() {
             </Button>
           </>
         )}
-
-        <Button
-          size="icon"
-          render={<Link to="/send-parcel" />}
-          className="h-12 w-12 rounded-full bg-[#1f1f1f] text-lime-300 hover:bg-[#111111]"
-          aria-label="Send a parcel"
-        >
-          <ArrowUpRight className="h-6 w-6" />
-        </Button>
       </div>
     </nav>
   );

@@ -16,7 +16,6 @@ import {
 
 import Logo from "@/components/Logo";
 import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
 import { NavUser } from "./nav-user";
 import {
   Sidebar,
@@ -126,19 +125,6 @@ export function AppSidebar(props) {
           ]
         : []),
     ],
-
-    projects: [
-      {
-        name: "Send Parcel",
-        url: "/send-parcel",
-        icon: PackagePlus,
-      },
-      {
-        name: "Rider Register",
-        url: "/rider",
-        icon: Bike,
-      },
-    ],
   };
 
   return (
@@ -154,7 +140,6 @@ export function AppSidebar(props) {
 
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
 
       <SidebarFooter>
