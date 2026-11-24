@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
 import { useParams } from "react-router";
 import useAxios from "../../hooks/useAxios";
 
@@ -9,7 +10,7 @@ const ParcelTrack = () => {
   const { trackingId } = useParams();
   const axiosInstance = useAxios();
 
-  const { data: trackings = [], isLoading } = useQuery({
+  const { data: trackings = [], isLoading, isFetching } = useQuery({
     queryKey: ["tracking", trackingId],
     queryFn: async () => {
       const res = await axiosInstance.get(
@@ -128,10 +129,8 @@ const ParcelTrack = () => {
         </div>
 
         {/* Loading */}
-        {isLoading ? (
-          <div className="py-10 text-center text-gray-500">
-            Loading tracking information...
-          </div>
+        {isLoading || isFetching ? (
+          <DashboardSkeleton />
         ) : (
           <div className="relative">
 

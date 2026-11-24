@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import {
@@ -17,6 +18,7 @@ function CompletedDeliveries() {
 
   const {
     isPending,
+    isFetching,
     error,
     data: parcels = [],
   } = useQuery({
@@ -40,7 +42,7 @@ function CompletedDeliveries() {
     return parcel.parcelCost * 0.6;
   };
 
-  if (isPending) return "Loading...";
+  if (isPending || isFetching) return <DashboardSkeleton />;
 
   if (error) return "An error has occurred: " + error.message;
 

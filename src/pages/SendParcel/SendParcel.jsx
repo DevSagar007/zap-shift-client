@@ -48,7 +48,6 @@ function SendParcel() {
     },
   });
   const { user } = useAuth();
-  console.log(user);
 
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
@@ -110,17 +109,13 @@ function SendParcel() {
   }, [setValue, user]);
 
   const handleSendParcel = (data) => {
-    console.log("parcel booking data:", data);
     const isDocument = data.parcelType === "document";
     const isSameDistrict = data.senderDistrict === data.receiverDistrict;
-    console.log("isDocument", isDocument);
-    console.log("isSameDistrict", isSameDistrict);
 
     // calculation
     const parcelWeight = parseFloat(data.parcelWeight);
 
-    let parcelCost = 0;
-    console.log(parcelCost, parcelCost);
+    let parcelCost;
 
     if (isDocument) {
       parcelCost = isSameDistrict ? 60 : 80;
@@ -138,7 +133,6 @@ function SendParcel() {
         parcelCost = minCharge + extraCharge;
       }
     }
-    console.log("parcelCost", parcelCost);
     data.parcelCost = parcelCost;
     Swal.fire({
       title: "Confirm Booking?",
@@ -152,7 +146,6 @@ function SendParcel() {
       if (result.isConfirmed)
         // save data parcel
         axiosSecure.post("/parcels", data).then((res) => {
-          console.log("after save parcel", res.data);
           if (res.data.insertedId) {
             Swal.fire({
               position: "top-center",

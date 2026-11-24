@@ -22,9 +22,13 @@ import RiderParcels from "../pages/Dashboard/RiderParcels/RiderParcels";
 import MyDeliveries from "../pages/Dashboard/MyDeliveries/MyDeliveries";
 import AssignDeliveries from "../pages/Dashboard/AssignDeliveries/AssignDeliveries";
 import CompletedDeliveries from "../pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
+import DashboardParcelTracking from "../pages/Dashboard/ParcelTracking/ParcelTracking";
 import ParcelTrack from "../pages/ParcelTrack/ParcelTrack";
 import Coverage from "../pages/Coverage/Coverage";
 import DashboardHome from "../pages/Dashboard/AdminDashboard/DashboardHome";
+
+const serviceCentersLoader = () =>
+  fetch("/serviceCentets.json").then((res) => res.json());
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +42,7 @@ export const router = createBrowserRouter([
       {
         path: "coverage",
         Component: Coverage,
-        loader: () => fetch("/serviceCentets.json").then((res) => res.json()),
+        loader: serviceCentersLoader,
       },
     ],
   },
@@ -97,6 +101,23 @@ export const router = createBrowserRouter([
         Component: MyParcels,
       },
       {
+        path: "create-parcel",
+        element: (
+          <PrivateRoute>
+            <SendParcel></SendParcel>
+          </PrivateRoute>
+        ),
+        loader: serviceCentersLoader,
+      },
+      {
+        path: "tracking",
+        Component: DashboardParcelTracking,
+      },
+      {
+        path: "history",
+        Component: MyParcels,
+      },
+      {
         path: "payment/:parcelId",
         Component: Payment,
       },
@@ -105,7 +126,7 @@ export const router = createBrowserRouter([
         Component: PaymentSuccess,
       },
       {
-        path: "payment-success",
+        path: "payment-cancelled",
         Component: PaymentCancelled,
       },
       {

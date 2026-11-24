@@ -1,17 +1,16 @@
 import useRole from "../../../hooks/useRole";
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
 import AdminDashboard from "./AdminDashboard";
 import RiderDashboard from "./RiderDashboard";
 import UserDashboard from "./UserDashboard";
 
 const DashboardHome = () => {
-  const { role, roleLoading } = useRole();
-  if (roleLoading) {
+  const { role, isRoleLoading, isRoleFetching } = useRole();
+  if (isRoleLoading || isRoleFetching) {
     return (
-      <>
-        <div className="flex min-h-screen items-center justify-center">
-          <span className="loading loading-infinity loading-xl"></span>
-        </div>
-      </>
+      <div className="min-h-screen p-6">
+        <DashboardSkeleton />
+      </div>
     );
   }
 

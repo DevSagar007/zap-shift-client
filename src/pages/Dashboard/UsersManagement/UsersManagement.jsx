@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import {
   Table,
@@ -24,6 +25,7 @@ function UsersManagement() {
     refetch,
     data: users = [],
     isLoading,
+    isFetching,
     isError,
   } = useQuery({
     queryKey: ["users", searchTerm],
@@ -37,8 +39,8 @@ function UsersManagement() {
     },
   });
 
-  if (isLoading) {
-    return <p className="text-center py-10">Loading users...</p>;
+  if (isLoading || isFetching) {
+    return <DashboardSkeleton />;
   }
 
   if (isError) {

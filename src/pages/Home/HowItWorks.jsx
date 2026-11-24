@@ -1,4 +1,4 @@
-import { Truck, MapPin, Building2, PackageCheck } from "lucide-react";
+import { Truck } from "lucide-react";
 
 const works = [
   {
@@ -21,7 +21,7 @@ const works = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-20 bg-[#F4F5F7]">
+    <section id="how-it-works" className="scroll-mt-24 py-20 bg-[#F4F5F7]">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-[42px] font-bold text-[#0B3F45] mb-14">
           How it Works

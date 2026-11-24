@@ -7,7 +7,6 @@ import {
   Send,
   MapPin,
   History,
-  Wallet,
   Receipt,
   Truck,
   UserCheck,
@@ -33,8 +32,6 @@ import { Link } from "react-router";
 export function AppSidebar(props) {
   const { role } = useRole();
   const { user } = useAuth();
-
-  console.log("use role:", role);
 
   const data = {
     user: {
@@ -106,12 +103,6 @@ export function AppSidebar(props) {
         title: "Payment History",
         url: "/dashboard/payment-history",
         icon: Receipt,
-      },
-
-      {
-        title: "Wallet",
-        url: "/dashboard/wallet",
-        icon: Wallet,
       },
 
       // admin routes

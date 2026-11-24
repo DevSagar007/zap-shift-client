@@ -1,4 +1,5 @@
 import { useParams } from "react-router";
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@base-ui/react";
@@ -8,7 +9,7 @@ function Payment() {
   const axiosSecure = useAxiosSecure();
 
   console.log(parcelId);
-  const { isLoading, data: parcel } = useQuery({
+  const { isLoading, isFetching, data: parcel } = useQuery({
     queryKey: ["parcels", parcelId],
     enabled: !!parcelId,
     queryFn: async () => {
@@ -45,8 +46,8 @@ function Payment() {
     }
   };
 
-  if (isLoading) {
-    return <div>Payment Loading</div>;
+  if (isLoading || isFetching) {
+    return <DashboardSkeleton />;
   }
 
   return (

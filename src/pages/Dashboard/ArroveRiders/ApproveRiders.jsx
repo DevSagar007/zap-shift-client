@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { DashboardSkeleton } from "@/components/ui/dashboard-skeletons";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import {
   Table,
@@ -16,6 +17,7 @@ function ApproveRiders() {
 
   const {
     isPending,
+    isFetching,
     error,
     refetch,
     data: riders = [],
@@ -27,7 +29,7 @@ function ApproveRiders() {
     },
   });
 
-  if (isPending) return "Loading...";
+  if (isPending || isFetching) return <DashboardSkeleton />;
 
   if (error) return "An error has occurred: " + error.message;
 

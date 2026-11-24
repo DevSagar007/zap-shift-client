@@ -1,4 +1,8 @@
 import { useState } from "react";
+import {
+  ListSkeleton,
+  TableRowsSkeleton,
+} from "@/components/ui/dashboard-skeletons";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import {
@@ -31,6 +35,7 @@ const AssignRIders = () => {
     refetch,
     data: parcels = [],
     isLoading,
+    isFetching,
   } = useQuery({
     queryKey: ["parcels", "pending-pickup"],
     queryFn: async () => {
@@ -46,6 +51,7 @@ const AssignRIders = () => {
     data: riders = [],
     refetch: refetchRiders,
     isLoading: isRidersLoading,
+    isFetching: isRidersFetching,
   } = useQuery({
     queryKey: ["riders", "available", selectedParcel?.receiverDistrict],
     queryFn: async () => {
@@ -112,15 +118,8 @@ const AssignRIders = () => {
           </TableHeader>
 
           <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center py-10 text-muted-foreground"
-                >
-                  Loading parcels...
-                </TableCell>
-              </TableRow>
+            {isLoading || isFetching ? (
+              <TableRowsSkeleton rows={5} columns={7} />
             ) : parcels.length === 0 ? (
               <TableRow>
                 <TableCell
@@ -239,10 +238,8 @@ const AssignRIders = () => {
           </DialogHeader>
 
           <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
-            {isRidersLoading ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">
-                Loading riders...
-              </p>
+            {isRidersLoading || isRidersFetching ? (
+              <ListSkeleton rows={4} />
             ) : riders.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
                 No approved riders available
