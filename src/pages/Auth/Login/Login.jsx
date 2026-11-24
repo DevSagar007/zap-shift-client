@@ -52,9 +52,7 @@ export default function LoginPage() {
         <section className="flex flex-col justify-between px-6 py-6 sm:px-10 lg:px-12">
           <div className="max-w-xl">
             {/* Logo */}
-            <Link>
-              <Logo></Logo>
-            </Link>
+            <Logo />
             {/* Login Form */}
             <div className="mt-20 max-w-md sm:mt-24 lg:mt-28 lg:pl-8">
               <div>

@@ -111,9 +111,7 @@ function Navbar() {
           </SheetContent>
         </Sheet>
 
-        <Link to="/" className="flex items-center">
-          <Logo />
-        </Link>
+        <Logo className="flex items-center" />
       </div>
 
       <div className="hidden items-center gap-6 lg:flex">

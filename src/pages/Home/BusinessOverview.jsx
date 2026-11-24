@@ -49,38 +49,39 @@ export default function BusinessOverview() {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-lime-300/40 bg-lime-300/10 px-4 py-2 text-xs font-semibold capitalize text-[#0B3F45]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#0B3F45]" />
-            SMART BUSINESS SOLUTIONS
+            DELIVERY FOR PEOPLE & BUSINESSES
           </span>
 
           <h2 className="mt-6 text-[42px] font-bold leading-tight text-[#0B3F45]">
-            Build a stronger digital presence for your business.
+            One delivery platform for every parcel.
           </h2>
 
           <p className="mt-5 max-w-xl text-[17px] leading-8 text-[#646A73]">
-            Discover innovative solutions designed to simplify your workflow,
-            improve productivity, and help your business grow.
+            Zap Shift connects customers, riders, and administrators in one
+            simple workflow—from booking and payment to pickup, delivery, and
+            tracking.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-[#E6EAEB] p-5">
               <BriefcaseBusiness className="h-6 w-6 text-[#0B3F45]" />
               <p className="mt-3 font-semibold text-[#0B3F45]">
-                Smart Solutions
+                Simple Parcel Booking
               </p>
               <p className="mt-1 text-sm leading-6 text-[#646A73]">
-                Powerful tools and modern solutions to support your business
-                goals.
+                Enter sender and receiver details, choose delivery locations,
+                and see the delivery charge before you confirm.
               </p>
             </div>
 
             <div className="rounded-2xl border border-[#E6EAEB] p-5">
               <ShieldCheck className="h-6 w-6 text-[#0B3F45]" />
               <p className="mt-3 font-semibold text-[#0B3F45]">
-                Reliable Support
+                Safe, Trackable Delivery
               </p>
               <p className="mt-1 text-sm leading-6 text-[#646A73]">
-                Get the guidance and support you need to move your business
-                forward.
+                Follow every important delivery event with a unique tracking
+                ID and a clear status timeline.
               </p>
             </div>
           </div>
@@ -89,7 +90,7 @@ export default function BusinessOverview() {
             to="/#services"
             className="mt-9 inline-flex h-12 items-center gap-2 rounded-xl bg-[#063D42] px-6 text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#052E33] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#063D42]/40 focus-visible:ring-offset-2"
           >
-            Explore Our Services
+            Explore Delivery Services
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
@@ -99,15 +100,15 @@ export default function BusinessOverview() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium capitalize text-lime-200/80">
-                  BUSINESS OVERVIEW
+                  DELIVERY WORKFLOW
                 </p>
                 <p className="mt-2 text-xl font-semibold">
-                  Everything you need to grow
+                  From booking to doorstep
                 </p>
               </div>
               <span className="inline-flex items-center gap-2 rounded-full bg-lime-300/15 px-3 py-1.5 text-xs font-semibold text-lime-200">
                 <span className="h-1.5 w-1.5 rounded-full bg-lime-300" />
-                Active
+                On the move
               </span>
             </div>
 
@@ -153,14 +154,14 @@ export default function BusinessOverview() {
           <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-5">
             <div>
               <p className="text-xs font-semibold capitalize text-[#8A9099]">
-                LATEST UPDATE
+                    DELIVERY UPDATE
               </p>
               <p className="mt-1 text-sm font-bold text-[#0B3F45]">
-                Your business is moving forward
+                Your parcel journey is easy to follow
               </p>
             </div>
             <span className="rounded-full bg-[#EEF0FF] px-3 py-1.5 text-xs font-semibold text-[#0B3F45]">
-              Updated now
+              Live tracking
             </span>
           </div>
         </div>

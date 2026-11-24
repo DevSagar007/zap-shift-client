@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import authImage from "../../../../public/assets/authImage.png";
 import { useState } from "react";
 import Logo from "@/components/Logo";
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -77,9 +77,7 @@ function Register() {
           <section className="flex flex-col justify-between px-6 py-6 sm:px-10 lg:px-12">
             <div className="max-w-xl">
               {/* Logo */}
-              <Link to="/">
-                <Logo />
-              </Link>
+              <Logo />
               {/* Login Form */}
               <div className="mt-20 max-w-md sm:mt-24 lg:mt-28 lg:pl-8">
                 <div>

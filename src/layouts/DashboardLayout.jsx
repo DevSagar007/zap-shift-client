@@ -4,8 +4,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import {
+  House,
   LayoutDashboard,
   LogOut,
   Package,
@@ -20,6 +21,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuLinkItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -90,27 +92,38 @@ function DashboardUserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem
+          <DropdownMenuLinkItem
+            render={<Link to="/" />}
+            closeOnClick
             className="cursor-pointer"
-            onClick={() => navigate("/dashboard")}
+          >
+            <House className="size-4" />
+            Home
+          </DropdownMenuLinkItem>
+          <DropdownMenuLinkItem
+            render={<Link to="/dashboard" />}
+            closeOnClick
+            className="cursor-pointer"
           >
             <LayoutDashboard className="size-4" />
             Dashboard
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </DropdownMenuLinkItem>
+          <DropdownMenuLinkItem
+            render={<Link to="/dashboard/my-parcels" />}
+            closeOnClick
             className="cursor-pointer"
-            onClick={() => navigate("/dashboard/my-parcels")}
           >
             <Package className="size-4" />
             My Parcels
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </DropdownMenuLinkItem>
+          <DropdownMenuLinkItem
+            render={<Link to="/dashboard/payment-history" />}
+            closeOnClick
             className="cursor-pointer"
-            onClick={() => navigate("/dashboard/payment-history")}
           >
             <Receipt className="size-4" />
             Payment History
-          </DropdownMenuItem>
+          </DropdownMenuLinkItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem

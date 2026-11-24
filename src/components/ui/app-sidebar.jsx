@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/sidebar";
 import useRole from "../../hooks/useRole";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router";
 
 export function AppSidebar(props) {
   const { role } = useRole();
@@ -130,12 +129,10 @@ export function AppSidebar(props) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="h-16 justify-center border-b px-4 py-0 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2">
-        <Link to={"/"}>
-          <Logo
-            className="flex h-9 min-w-0 items-center overflow-hidden"
-            imageClassName="h-full w-auto"
-          />
-        </Link>
+        <Logo
+          className="flex h-9 min-w-0 items-center overflow-hidden"
+          imageClassName="h-full w-auto"
+        />
       </SidebarHeader>
 
       <SidebarContent>

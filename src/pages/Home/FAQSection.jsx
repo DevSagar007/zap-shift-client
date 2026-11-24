@@ -40,13 +40,12 @@ const FAQSection = () => {
       <div className="mx-auto max-w-[888px]">
         <div className="mb-10 text-center">
           <h2 className="mb-4 text-[32px] font-bold text-[#0B3F45] sm:text-[42px]">
-            Frequently Asked Question
+            Frequently Asked Questions
           </h2>
 
           <p className="mx-auto max-w-[760px] text-[16px] leading-8 text-[#646A73] sm:text-[17px]">
-            Enhance posture, mobility, and well-being effortlessly with Posture
-            Pro. Achieve proper alignment, reduce pain, and strengthen your body
-            with ease!
+            Find quick answers about booking parcels, delivery charges,
+            payments, tracking, and becoming a Zap Shift rider.
           </p>
         </div>
 

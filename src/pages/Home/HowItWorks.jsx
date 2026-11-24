@@ -7,23 +7,23 @@ import {
 
 const works = [
   {
-    title: "Book a Pickup or Drop-off",
-    desc: "Create a parcel, choose pickup or drop-off, and get a tracking ID in seconds.",
+    title: "Create Your Parcel",
+    desc: "Enter sender and receiver details, choose the delivery locations, and submit your booking.",
     icon: PackagePlus,
   },
   {
-    title: "Cash on Delivery",
-    desc: "Let recipients pay when the parcel arrives with secure COD handling nationwide.",
+    title: "Pay the Delivery Charge",
+    desc: "Review the calculated cost and complete your payment securely through Stripe Checkout.",
     icon: Banknote,
   },
   {
-    title: "Smart Delivery Hubs",
-    desc: "Parcels move through our sorting hubs for faster routing and reliable last-mile delivery.",
+    title: "Rider Pickup & Delivery",
+    desc: "An approved rider accepts the task, picks up your parcel, and updates the delivery status.",
     icon: Warehouse,
   },
   {
-    title: "SME & Corporate Booking",
-    desc: "Manage bulk shipments, recurring orders, and dedicated support from one dashboard.",
+    title: "Track Every Step",
+    desc: "Use your tracking ID to follow parcel progress from booking to successful delivery.",
     icon: BriefcaseBusiness,
   },
 ];
