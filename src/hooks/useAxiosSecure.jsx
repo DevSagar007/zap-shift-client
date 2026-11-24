@@ -26,6 +26,7 @@ const useAxiosSecure = () => {
         if (!["get", "head", "options"].includes(config.method?.toLowerCase())) {
           const csrfToken = readCookie("zap_shift_csrf");
           if (csrfToken) {
+            config.headers = config.headers || {};
             config.headers["X-CSRF-Token"] = csrfToken;
           }
         }

@@ -36,28 +36,39 @@ function AuthProvider({ children }) {
   // register user
   const registerUser = async (name, email, password) => {
     setLoading(true);
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(result.user, { displayName: name });
-    await syncServerSession(result.user);
-    setUser(auth.currentUser);
-    setLoading(false);
-    return result;
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(result.user, { displayName: name });
+      await syncServerSession(result.user);
+      setUser(auth.currentUser);
+      return result;
+    } finally {
+      setLoading(false);
+    }
   };
 
   // signin User
   const signInUser = async (email, password) => {
     setLoading(true);
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    await syncServerSession(result.user);
-    return result;
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      await syncServerSession(result.user);
+      return result;
+    } finally {
+      setLoading(false);
+    }
   };
 
   // signin Google
   const signInGoogle = async () => {
     setLoading(true);
-    const result = await signInWithPopup(auth, googleProvider);
-    await syncServerSession(result.user);
-    return result;
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      await syncServerSession(result.user);
+      return result;
+    } finally {
+      setLoading(false);
+    }
   };
 
   // sign out user
@@ -70,6 +81,7 @@ function AuthProvider({ children }) {
       });
     } finally {
       await signOut(auth);
+      setLoading(false);
     }
   };
 
