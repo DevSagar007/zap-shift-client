@@ -121,7 +121,7 @@ function Navbar() {
           <Link
             key={item.href}
             to={item.href}
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-[#03373d]"
+            className="text-[15px] font-semibold text-muted-foreground transition-colors hover:text-[#03373d]"
           >
             {item.label}
           </Link>
